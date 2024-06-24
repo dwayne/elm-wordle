@@ -1,0 +1,45 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "caddy@latest": {
+      "last_modified": "2024-06-04T00:03:09Z",
+      "resolved": "github:NixOS/nixpkgs/3b01abcc24846ae49957b30f4345bab4b3f1d14b#caddy",
+      "source": "devbox-search",
+      "version": "2.8.4",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/93iyysjxi4bv2kvykghnc9blgfafgy70-caddy-2.8.4"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/iavbj399v34qfd6pw6rsmh1rqfbyclac-caddy-2.8.4"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/8wbxwyq9dgwjbjn95fd11sp77yrh9knv-caddy-2.8.4"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/1iz89fy5fi998g43z1m4j7s5f095di68-caddy-2.8.4"
+        }
+      }
+    },
+    "elmPackages.elm@latest": {
+      "last_modified": "2024-06-21T06:40:32Z",
+      "resolved": "github:NixOS/nixpkgs/ed0af8c19f55bede71dc9c2002185cf228339901#elmPackages.elm",
+      "source": "devbox-search",
+      "version": "0.19.1",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/3ai7y2paxi1c6q9r4mr9m0y66slcj10h-elm-0.19.1"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/h1rrg1s96196cqs37pdys84qcfnhxxif-elm-0.19.1"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/k5hx9q5x7fb72rlzz3wla0mdj5v0g0pj-elm-0.19.1"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/srkgcyyll66kia8y5x890wd9g72f9i1w-elm-0.19.1"
+        }
+      }
+    }
+  }
+}

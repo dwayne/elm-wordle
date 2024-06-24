@@ -1,0 +1,14 @@
+{
+  "packages": {
+    "caddy": {
+        "version": "latest",
+        "disable_plugin": true
+      },
+      "elmPackages.elm": "latest"
+  },
+  "env": {
+    "project": "$PWD",
+      "build": "$PWD/.build",
+      "PATH": "$PWD/bin:$PATH"
+  }
+}
