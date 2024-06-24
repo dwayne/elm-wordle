@@ -1,16 +1,11 @@
-module Data.History exposing (History, Status(..), empty, getStatus, update)
+module Data.History exposing (History, empty, getLetter, update)
 
+import Data.Letter as Letter exposing (Letter)
 import Dict exposing (Dict)
 
 
 type History
-    = History (Dict Char Status)
-
-
-type Status
-    = Correct
-    | AlmostCorrect
-    | Incorrect
+    = History (Dict Char Letter)
 
 
 empty : History
@@ -18,30 +13,26 @@ empty =
     History Dict.empty
 
 
-update : Char -> Status -> History -> History
-update ch newStatus (History dict) =
+update : Letter -> History -> History
+update newLetter (History letters) =
     History <|
         Dict.update
-            ch
-            (\maybeOldStatus ->
-                case maybeOldStatus of
-                    Just oldStatus ->
-                        if oldStatus == AlmostCorrect then
-                            if newStatus == Correct then
-                                Just newStatus
-
-                            else
-                                maybeOldStatus
+            (Letter.toChar newLetter)
+            (\maybeOldLetter ->
+                case maybeOldLetter of
+                    Just oldLetter ->
+                        if newLetter |> Letter.isGreaterThan oldLetter then
+                            Just newLetter
 
                         else
-                            maybeOldStatus
+                            maybeOldLetter
 
                     Nothing ->
-                        Just newStatus
+                        Just newLetter
             )
-            dict
+            letters
 
 
-getStatus : Char -> History -> Maybe Status
-getStatus ch (History dict) =
-    Dict.get ch dict
+getLetter : Char -> History -> Maybe Letter
+getLetter ch (History letters) =
+    Dict.get ch letters

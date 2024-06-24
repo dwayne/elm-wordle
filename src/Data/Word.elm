@@ -1,4 +1,4 @@
-module Data.Word exposing (Word, fromString, toLetters, toString, zip)
+module Data.Word exposing (Word, fromString, toChars, toString, zip)
 
 import Data.Bag as Bag exposing (Bag)
 import Data.Dictionary as Dictionary exposing (Dictionary)
@@ -19,9 +19,6 @@ fromString d s =
 
 zip : Word -> Word -> List ( Char, Char )
 zip (Word w1) (Word w2) =
-    --
-    -- Assumes |w1| == |w2|.
-    --
     zipHelper [] w1 w2
 
 
@@ -29,28 +26,15 @@ zipHelper : List ( Char, Char ) -> String -> String -> List ( Char, Char )
 zipHelper pairs s1 s2 =
     case ( String.uncons s1, String.uncons s2 ) of
         ( Just ( ch1, rest1 ), Just ( ch2, rest2 ) ) ->
-            zipHelper ( ( ch1, ch2 ) :: pairs ) rest1 rest2
-
-        ( Nothing, Nothing ) ->
-            List.reverse pairs
+            zipHelper (( ch1, ch2 ) :: pairs) rest1 rest2
 
         _ ->
-            []
+            List.reverse pairs
 
 
-toLetters : Word -> Bag Char
-toLetters (Word w) =
-    toLettersHelper Bag.empty w
-
-
-toLettersHelper : Bag Char -> String -> Bag Char
-toLettersHelper bag s =
-    case String.uncons s of
-        Just ( ch, rest ) ->
-            toLettersHelper (Bag.insert ch bag) rest
-
-        Nothing ->
-            bag
+toChars : Word -> Bag Char
+toChars (Word w) =
+    String.foldl Bag.insert Bag.empty w
 
 
 toString : Word -> String

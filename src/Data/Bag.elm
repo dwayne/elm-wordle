@@ -1,4 +1,4 @@
-module Data.Bag exposing (Bag, empty, insert, remove, toList)
+module Data.Bag exposing (Bag, contains, empty, insert, remove, toList)
 
 import Dict exposing (Dict)
 
@@ -10,6 +10,11 @@ type Bag a
 empty : Bag a
 empty =
     Bag Dict.empty
+
+
+contains : comparable -> Bag comparable -> Bool
+contains element (Bag contents) =
+    Dict.member element contents
 
 
 insert : comparable -> Bag comparable -> Bag comparable

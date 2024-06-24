@@ -4,7 +4,8 @@
         "version": "latest",
         "disable_plugin": true
       },
-      "elmPackages.elm": "latest"
+      "elmPackages.elm": "latest",
+      "elmPackages.elm-format": "latest"
   },
   "env": {
     "project": "$PWD",
