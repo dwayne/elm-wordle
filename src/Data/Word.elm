@@ -1,6 +1,5 @@
 module Data.Word exposing (Word, fromString, toString)
 
-import Data.Bag as Bag exposing (Bag)
 import Data.Dictionary as Dictionary exposing (Dictionary)
 
 
