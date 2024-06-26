@@ -41,6 +41,26 @@
         }
       }
     },
+    "elmPackages.elm-test@latest": {
+      "last_modified": "2024-06-12T20:55:33Z",
+      "resolved": "github:NixOS/nixpkgs/a9858885e197f984d92d7fe64e9fff6b2e488d40#elmPackages.elm-test",
+      "source": "devbox-search",
+      "version": "0.19.1-revision12",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/96jsrpd68ngb5ps20iym313xxzncqc45-elm-test-0.19.1-revision12"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/s3666csqn797vs1ldswxpvajl1i8bzw8-elm-test-0.19.1-revision12"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/sw0a5cp537i78bmx6cjxvdrhy53p6qa9-elm-test-0.19.1-revision12"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/n2qj70rrci3ln6qzf2gg4jjgsx9ly333-elm-test-0.19.1-revision12"
+        }
+      }
+    },
     "elmPackages.elm@latest": {
       "last_modified": "2024-06-21T06:40:32Z",
       "resolved": "github:NixOS/nixpkgs/ed0af8c19f55bede71dc9c2002185cf228339901#elmPackages.elm",
