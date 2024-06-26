@@ -1,5 +1,6 @@
 module Data.Attempt exposing (Attempt, isCorrect, try)
 
+import Data.Answer as Answer exposing (Answer)
 import Data.Bag as Bag exposing (Bag)
 import Data.Letter as Letter exposing (Letter)
 import Data.Word as Word exposing (Word)
@@ -14,18 +15,18 @@ isCorrect =
     List.all Letter.isCorrect
 
 
-try : Maybe (Bag Char) -> Word -> Word -> Attempt
-try maybeCharsInTarget target =
+try : Maybe (Bag Char) -> Answer -> Word -> Attempt
+try maybeCharsInAnswers answer =
     let
         chars =
-            case maybeCharsInTarget of
-                Just charsInTarget ->
-                    charsInTarget
+            case maybeCharsInAnswers of
+                Just charsInAnswers ->
+                    charsInAnswers
 
                 Nothing ->
-                    Word.toChars target
+                    Answer.toChars answer
     in
-    Word.zip target
+    Answer.zip answer
         >> findCorrectGuesses { letters = [], chars = chars }
         >> refineIncorrectGuesses
 

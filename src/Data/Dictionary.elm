@@ -1,4 +1,4 @@
-module Data.Dictionary exposing (Dictionary, contains, fromList)
+module Data.Dictionary exposing (Dictionary, contains, containsAnswer, fromList)
 
 import Set exposing (Set)
 
@@ -56,6 +56,11 @@ processWords n =
                 Nothing
         )
         >> Set.fromList
+
+
+containsAnswer : String -> Dictionary -> Bool
+containsAnswer s (Dictionary { answers }) =
+    Set.member s answers
 
 
 contains : String -> Dictionary -> Bool

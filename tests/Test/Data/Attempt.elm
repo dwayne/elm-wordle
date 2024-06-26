@@ -1,5 +1,6 @@
 module Test.Data.Attempt exposing (suite)
 
+import Data.Answer as Answer
 import Data.Attempt as Attempt exposing (Attempt)
 import Data.Dictionary as Dictionary exposing (Dictionary)
 import Data.Letter as Letter exposing (Letter)
@@ -13,15 +14,15 @@ suite =
     describe "Data.Attempt" <|
         List.map
             testAttempt
-            [ { target = "robot"
+            [ { answer = "robot"
               , guess = "broom"
               , expected = [ a 'b', a 'r', a 'o', c 'o', i 'm' ]
               }
-            , { target = "robot"
+            , { answer = "robot"
               , guess = "crown"
               , expected = [ i 'c', a 'r', a 'o', i 'w', i 'n' ]
               }
-            , { target = "robot"
+            , { answer = "robot"
               , guess = "robot"
               , expected = [ c 'r', c 'o', c 'b', c 'o', c 't' ]
               }
@@ -30,29 +31,29 @@ suite =
             -- The following test is based on
             -- https://github.com/Kinkelin/WordleCompetition/pull/8
             --
-            , { target = "shine"
+            , { answer = "shine"
               , guess = "sense"
               , expected = [ c 's', i 'e', a 'n', i 's', c 'e' ]
               }
             ]
 
 
-testAttempt : { target : String, guess : String, expected : Attempt } -> Test
-testAttempt { target, guess, expected } =
-    test (Debug.toString { target = target, guess = guess }) <|
+testAttempt : { answer : String, guess : String, expected : Attempt } -> Test
+testAttempt { answer, guess, expected } =
+    test (Debug.toString { answer = answer, guess = guess }) <|
         \_ ->
             let
-                maybeTargetWord =
-                    Word.fromString dictionary target
+                maybeAnswer =
+                    Answer.fromString dictionary answer
 
-                maybeGuessWord =
+                maybeGuess =
                     Word.fromString dictionary guess
 
                 maybeExpected =
                     Just expected
 
                 maybeActual =
-                    Maybe.map2 (Attempt.try Nothing) maybeTargetWord maybeGuessWord
+                    Maybe.map2 (Attempt.try Nothing) maybeAnswer maybeGuess
             in
             Expect.equal maybeActual maybeExpected
 

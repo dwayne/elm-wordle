@@ -11,6 +11,7 @@ module Data.Wordle exposing
     , try
     )
 
+import Data.Answer as Answer exposing (Answer)
 import Data.Attempt as Attempt exposing (Attempt)
 import Data.Bag as Bag exposing (Bag)
 import Data.History as History exposing (History)
@@ -24,7 +25,7 @@ type Wordle
 
 type alias Config =
     { numAttemptsAllowed : Int
-    , target : Word
+    , answer : Answer
     , chars : Bag Char
     }
 
@@ -52,13 +53,13 @@ type Status
     | Lost
 
 
-start : Int -> Word -> Wordle
-start numAttemptsAllowed target =
+start : Int -> Answer -> Wordle
+start numAttemptsAllowed answer =
     let
         config =
             { numAttemptsAllowed = clamp minAttemptsAllowed maxAttemptsAllowed numAttemptsAllowed
-            , target = target
-            , chars = Word.toChars target
+            , answer = answer
+            , chars = Answer.toChars answer
             }
 
         state =
@@ -76,7 +77,7 @@ try guess (Wordle config state) =
         if state.status == InProgress then
             let
                 attempt =
-                    Attempt.try (Just config.chars) config.target guess
+                    Attempt.try (Just config.chars) config.answer guess
 
                 pastAttempts =
                     attempt :: state.pastAttempts
@@ -102,7 +103,7 @@ try guess (Wordle config state) =
 
 type alias Details =
     { numAttemptsAllowed : Int
-    , target : Word
+    , answer : Answer
     , pastAttempts : List Attempt
     , history : History
     , status : Status
@@ -110,9 +111,9 @@ type alias Details =
 
 
 inspect : Wordle -> Details
-inspect (Wordle { numAttemptsAllowed, target } { pastAttempts, history, status }) =
+inspect (Wordle { numAttemptsAllowed, answer } { pastAttempts, history, status }) =
     { numAttemptsAllowed = numAttemptsAllowed
-    , target = target
+    , answer = answer
     , pastAttempts = List.reverse pastAttempts
     , history = history
     , status = status
