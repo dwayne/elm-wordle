@@ -1,16 +1,15 @@
-module Data.Dictionary.Classic exposing (allowedGuessesDictionary, answersDictionary)
+module Data.Dictionary.Classic exposing (dictionary)
 
 import Data.Dictionary as Dictionary exposing (Dictionary)
 
 
-answersDictionary : Dictionary
-answersDictionary =
-    Dictionary.fromList 5 answers
-
-
-allowedGuessesDictionary : Dictionary
-allowedGuessesDictionary =
-    Dictionary.fromList 5 allowedGuesses
+dictionary : Dictionary
+dictionary =
+    Dictionary.fromList
+        { wordLength = 5
+        , answers = answers
+        , nonAnswers = nonAnswers
+        }
 
 
 
@@ -13002,8 +13001,3 @@ nonAnswers =
     , "zymes"
     , "zymic"
     ]
-
-
-allowedGuesses : List String
-allowedGuesses =
-    answers ++ nonAnswers

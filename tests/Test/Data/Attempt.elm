@@ -60,13 +60,17 @@ testAttempt { target, guess, expected } =
 dictionary : Dictionary
 dictionary =
     Dictionary.fromList
-        5
-        [ "broom"
-        , "crown"
-        , "robot"
-        , "sense"
-        , "shine"
-        ]
+        { wordLength = 5
+        , answers =
+            [ "robot"
+            , "shine"
+            ]
+        , nonAnswers =
+            [ "broom"
+            , "crown"
+            , "sense"
+            ]
+        }
 
 
 c : Char -> Letter
