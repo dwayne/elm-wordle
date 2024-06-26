@@ -27,8 +27,8 @@ guess maybeCharsInAnswers answer =
                     Answer.toChars answer
     in
     Answer.zip answer
-        >> findCorrectGuesses { letters = [], chars = chars }
-        >> refineIncorrectGuesses
+        >> findCorrectLetters { letters = [], chars = chars }
+        >> findPossibleLetters
 
 
 type alias State =
@@ -37,15 +37,15 @@ type alias State =
     }
 
 
-findCorrectGuesses : State -> List ( Char, Char ) -> State
-findCorrectGuesses state pairs =
+findCorrectLetters : State -> List ( Char, Char ) -> State
+findCorrectLetters state pairs =
     case pairs of
         [] ->
             { state | letters = List.reverse state.letters }
 
         ( t, g ) :: restOfPairs ->
             if t == g then
-                findCorrectGuesses
+                findCorrectLetters
                     { state
                         | letters = Letter.Correct g :: state.letters
                         , chars = Bag.remove g state.chars
@@ -53,19 +53,19 @@ findCorrectGuesses state pairs =
                     restOfPairs
 
             else
-                findCorrectGuesses
-                    { state | letters = Letter.Incorrect g :: state.letters }
+                findCorrectLetters
+                    { state | letters = Letter.Impossible g :: state.letters }
                     restOfPairs
 
 
-refineIncorrectGuesses : State -> List Letter
-refineIncorrectGuesses { letters, chars } =
+findPossibleLetters : State -> List Letter
+findPossibleLetters { letters, chars } =
     List.map
         (\letterStatus ->
             case letterStatus of
-                Letter.Incorrect ch ->
+                Letter.Impossible ch ->
                     if Bag.contains ch chars then
-                        Letter.AlmostCorrect ch
+                        Letter.Possible ch
 
                     else
                         letterStatus

@@ -16,11 +16,11 @@ suite =
             testGuess
             [ { answer = "robot"
               , word = "broom"
-              , expected = [ a 'b', a 'r', a 'o', c 'o', i 'm' ]
+              , expected = [ p 'b', p 'r', p 'o', c 'o', i 'm' ]
               }
             , { answer = "robot"
               , word = "crown"
-              , expected = [ i 'c', a 'r', a 'o', i 'w', i 'n' ]
+              , expected = [ i 'c', p 'r', p 'o', i 'w', i 'n' ]
               }
             , { answer = "robot"
               , word = "robot"
@@ -33,7 +33,7 @@ suite =
             --
             , { answer = "shine"
               , word = "sense"
-              , expected = [ c 's', i 'e', a 'n', i 's', c 'e' ]
+              , expected = [ c 's', i 'e', p 'n', i 's', c 'e' ]
               }
             ]
 
@@ -79,11 +79,11 @@ c =
     Letter.Correct
 
 
-a : Char -> Letter
-a =
-    Letter.AlmostCorrect
+p : Char -> Letter
+p =
+    Letter.Possible
 
 
 i : Char -> Letter
 i =
-    Letter.Incorrect
+    Letter.Impossible

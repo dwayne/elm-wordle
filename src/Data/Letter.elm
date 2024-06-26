@@ -1,14 +1,10 @@
 module Data.Letter exposing (Letter(..), isCorrect, isGreaterThan, toChar)
 
 
-type
-    Letter
-    --
-    -- TODO: Use Correct, Possible, and NotPossible/Impossible.
-    --
+type Letter
     = Correct Char
-    | AlmostCorrect Char
-    | Incorrect Char
+    | Possible Char
+    | Impossible Char
 
 
 isCorrect : Letter -> Bool
@@ -24,13 +20,13 @@ isCorrect letter =
 isGreaterThan : Letter -> Letter -> Bool
 isGreaterThan second first =
     case ( first, second ) of
-        ( Correct _, AlmostCorrect _ ) ->
+        ( Correct _, Possible _ ) ->
             True
 
-        ( Correct _, Incorrect _ ) ->
+        ( Correct _, Impossible _ ) ->
             True
 
-        ( AlmostCorrect _, Incorrect _ ) ->
+        ( Possible _, Impossible _ ) ->
             True
 
         _ ->
@@ -43,8 +39,8 @@ toChar letter =
         Correct ch ->
             ch
 
-        AlmostCorrect ch ->
+        Possible ch ->
             ch
 
-        Incorrect ch ->
+        Impossible ch ->
             ch
