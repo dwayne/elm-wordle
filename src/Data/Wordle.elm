@@ -1,12 +1,13 @@
 module Data.Wordle exposing
     ( Config
+    , Details
     , State
     , Status(..)
     , Wordle
+    , inspect
     , maxAttemptsAllowed
     , minAttemptsAllowed
     , start
-    , toConfigAndState
     , try
     )
 
@@ -99,6 +100,20 @@ try guess (Wordle config state) =
             state
 
 
-toConfigAndState : Wordle -> { config : Config, state : State }
-toConfigAndState (Wordle config state) =
-    { config = config, state = state }
+type alias Details =
+    { numAttemptsAllowed : Int
+    , target : Word
+    , pastAttempts : List Attempt
+    , history : History
+    , status : Status
+    }
+
+
+inspect : Wordle -> Details
+inspect (Wordle { numAttemptsAllowed, target } { pastAttempts, history, status }) =
+    { numAttemptsAllowed = numAttemptsAllowed
+    , target = target
+    , pastAttempts = List.reverse pastAttempts
+    , history = history
+    , status = status
+    }
