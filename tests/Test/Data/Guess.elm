@@ -60,7 +60,7 @@ testGuess { answer, word, expected } =
 
 dictionary : Dictionary
 dictionary =
-    Dictionary.fromList
+    Dictionary.new
         { wordLength = 5
         , answers =
             [ "robot"

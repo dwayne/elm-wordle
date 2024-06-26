@@ -1,4 +1,4 @@
-module Data.Dictionary exposing (Dictionary, contains, containsAnswer, fromList)
+module Data.Dictionary exposing (Dictionary, contains, containsAnswer, new)
 
 import Set exposing (Set)
 
@@ -13,13 +13,13 @@ type Dictionary
         }
 
 
-fromList :
+new :
     { wordLength : Int
     , answers : List String
     , nonAnswers : List String
     }
     -> Dictionary
-fromList { wordLength, answers, nonAnswers } =
+new { wordLength, answers, nonAnswers } =
     Dictionary <|
         if wordLength >= 1 && wordLength <= 10 then
             let

@@ -5,7 +5,7 @@ import Data.Dictionary as Dictionary exposing (Dictionary)
 
 dictionary : Dictionary
 dictionary =
-    Dictionary.fromList
+    Dictionary.new
         { wordLength = 5
         , answers = answers
         , nonAnswers = nonAnswers
