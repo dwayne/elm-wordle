@@ -1,4 +1,4 @@
-module Data.Attempt exposing (Attempt, isCorrect, try)
+module Data.Guess exposing (Guess, guess, isCorrect)
 
 import Data.Answer as Answer exposing (Answer)
 import Data.Bag as Bag exposing (Bag)
@@ -6,17 +6,17 @@ import Data.Letter as Letter exposing (Letter)
 import Data.Word as Word exposing (Word)
 
 
-type alias Attempt =
+type alias Guess =
     List Letter
 
 
-isCorrect : Attempt -> Bool
+isCorrect : Guess -> Bool
 isCorrect =
     List.all Letter.isCorrect
 
 
-try : Maybe (Bag Char) -> Answer -> Word -> Attempt
-try maybeCharsInAnswers answer =
+guess : Maybe (Bag Char) -> Answer -> Word -> Guess
+guess maybeCharsInAnswers answer =
     let
         chars =
             case maybeCharsInAnswers of

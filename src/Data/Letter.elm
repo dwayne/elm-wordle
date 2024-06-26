@@ -1,7 +1,11 @@
 module Data.Letter exposing (Letter(..), isCorrect, isGreaterThan, toChar)
 
 
-type Letter
+type
+    Letter
+    --
+    -- TODO: Use Correct, Possible, and NotPossible/Impossible.
+    --
     = Correct Char
     | AlmostCorrect Char
     | Incorrect Char

@@ -1,8 +1,8 @@
-module Test.Data.Attempt exposing (suite)
+module Test.Data.Guess exposing (suite)
 
 import Data.Answer as Answer
-import Data.Attempt as Attempt exposing (Attempt)
 import Data.Dictionary as Dictionary exposing (Dictionary)
+import Data.Guess as Guess exposing (Guess)
 import Data.Letter as Letter exposing (Letter)
 import Data.Word as Word
 import Expect
@@ -11,19 +11,19 @@ import Test exposing (Test, describe, test)
 
 suite : Test
 suite =
-    describe "Data.Attempt" <|
+    describe "Data.Guess" <|
         List.map
-            testAttempt
+            testGuess
             [ { answer = "robot"
-              , guess = "broom"
+              , word = "broom"
               , expected = [ a 'b', a 'r', a 'o', c 'o', i 'm' ]
               }
             , { answer = "robot"
-              , guess = "crown"
+              , word = "crown"
               , expected = [ i 'c', a 'r', a 'o', i 'w', i 'n' ]
               }
             , { answer = "robot"
-              , guess = "robot"
+              , word = "robot"
               , expected = [ c 'r', c 'o', c 'b', c 'o', c 't' ]
               }
 
@@ -32,28 +32,28 @@ suite =
             -- https://github.com/Kinkelin/WordleCompetition/pull/8
             --
             , { answer = "shine"
-              , guess = "sense"
+              , word = "sense"
               , expected = [ c 's', i 'e', a 'n', i 's', c 'e' ]
               }
             ]
 
 
-testAttempt : { answer : String, guess : String, expected : Attempt } -> Test
-testAttempt { answer, guess, expected } =
-    test (Debug.toString { answer = answer, guess = guess }) <|
+testGuess : { answer : String, word : String, expected : Guess } -> Test
+testGuess { answer, word, expected } =
+    test (Debug.toString { answer = answer, word = word }) <|
         \_ ->
             let
                 maybeAnswer =
                     Answer.fromString dictionary answer
 
                 maybeGuess =
-                    Word.fromString dictionary guess
+                    Word.fromString dictionary word
 
                 maybeExpected =
                     Just expected
 
                 maybeActual =
-                    Maybe.map2 (Attempt.try Nothing) maybeAnswer maybeGuess
+                    Maybe.map2 (Guess.guess Nothing) maybeAnswer maybeGuess
             in
             Expect.equal maybeActual maybeExpected
 

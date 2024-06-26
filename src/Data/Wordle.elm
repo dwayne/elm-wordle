@@ -4,16 +4,16 @@ module Data.Wordle exposing
     , State
     , Status(..)
     , Wordle
+    , guess
     , inspect
-    , maxAttemptsAllowed
-    , minAttemptsAllowed
+    , maxGuessesAllowed
+    , minGuessesAllowed
     , start
-    , try
     )
 
 import Data.Answer as Answer exposing (Answer)
-import Data.Attempt as Attempt exposing (Attempt)
 import Data.Bag as Bag exposing (Bag)
+import Data.Guess as Guess exposing (Guess)
 import Data.History as History exposing (History)
 import Data.Letter as Letter exposing (Letter)
 import Data.Word as Word exposing (Word)
@@ -24,24 +24,24 @@ type Wordle
 
 
 type alias Config =
-    { numAttemptsAllowed : Int
+    { numGuessesAllowed : Int
     , answer : Answer
     , chars : Bag Char
     }
 
 
-minAttemptsAllowed : Int
-minAttemptsAllowed =
+minGuessesAllowed : Int
+minGuessesAllowed =
     1
 
 
-maxAttemptsAllowed : Int
-maxAttemptsAllowed =
+maxGuessesAllowed : Int
+maxGuessesAllowed =
     10
 
 
 type alias State =
-    { pastAttempts : List Attempt
+    { pastGuesses : List Guess
     , history : History
     , status : Status
     }
@@ -54,16 +54,16 @@ type Status
 
 
 start : Int -> Answer -> Wordle
-start numAttemptsAllowed answer =
+start numGuessesAllowed answer =
     let
         config =
-            { numAttemptsAllowed = clamp minAttemptsAllowed maxAttemptsAllowed numAttemptsAllowed
+            { numGuessesAllowed = clamp minGuessesAllowed maxGuessesAllowed numGuessesAllowed
             , answer = answer
             , chars = Answer.toChars answer
             }
 
         state =
-            { pastAttempts = []
+            { pastGuesses = []
             , history = History.empty
             , status = InProgress
             }
@@ -71,50 +71,50 @@ start numAttemptsAllowed answer =
     Wordle config state
 
 
-try : Word -> Wordle -> Wordle
-try guess (Wordle config state) =
+guess : Word -> Wordle -> Wordle
+guess word (Wordle config state) =
     Wordle config <|
         if state.status == InProgress then
             let
                 attempt =
-                    Attempt.try (Just config.chars) config.answer guess
+                    Guess.guess (Just config.chars) config.answer word
 
-                pastAttempts =
-                    attempt :: state.pastAttempts
+                pastGuesses =
+                    attempt :: state.pastGuesses
 
                 history =
                     List.foldl History.update state.history attempt
 
                 status =
-                    if Attempt.isCorrect attempt then
+                    if Guess.isCorrect attempt then
                         Won
 
-                    else if List.length pastAttempts == config.numAttemptsAllowed then
+                    else if List.length pastGuesses == config.numGuessesAllowed then
                         Lost
 
                     else
                         InProgress
             in
-            { state | pastAttempts = pastAttempts, history = history, status = status }
+            { state | pastGuesses = pastGuesses, history = history, status = status }
 
         else
             state
 
 
 type alias Details =
-    { numAttemptsAllowed : Int
+    { numGuessesAllowed : Int
     , answer : Answer
-    , pastAttempts : List Attempt
+    , pastGuesses : List Guess
     , history : History
     , status : Status
     }
 
 
 inspect : Wordle -> Details
-inspect (Wordle { numAttemptsAllowed, answer } { pastAttempts, history, status }) =
-    { numAttemptsAllowed = numAttemptsAllowed
+inspect (Wordle { numGuessesAllowed, answer } { pastGuesses, history, status }) =
+    { numGuessesAllowed = numGuessesAllowed
     , answer = answer
-    , pastAttempts = List.reverse pastAttempts
+    , pastGuesses = List.reverse pastGuesses
     , history = history
     , status = status
     }
