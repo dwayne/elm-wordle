@@ -76,17 +76,17 @@ guess word (Wordle config state) =
     Wordle config <|
         if state.status == InProgress then
             let
-                attempt =
+                g =
                     Guess.guess (Just config.chars) config.answer word
 
                 pastGuesses =
-                    attempt :: state.pastGuesses
+                    g :: state.pastGuesses
 
                 history =
-                    List.foldl History.update state.history attempt
+                    History.update g state.history
 
                 status =
-                    if Guess.isCorrect attempt then
+                    if Guess.isCorrect g then
                         Won
 
                     else if List.length pastGuesses == config.numGuessesAllowed then

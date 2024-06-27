@@ -1,11 +1,18 @@
-module Data.History exposing (History, empty, getLetter, update)
+module Data.History exposing (History, empty, getPast, update)
 
+import Data.Guess exposing (Guess)
 import Data.Letter as Letter exposing (Letter)
 import Dict exposing (Dict)
 
 
 type History
-    = History (Dict Char Letter)
+    = History (Dict Char Past)
+
+
+type Past
+    = Correct
+    | Possible
+    | Impossible
 
 
 empty : History
@@ -13,26 +20,42 @@ empty =
     History Dict.empty
 
 
-update : Letter -> History -> History
-update newLetter (History letters) =
-    History <|
-        Dict.update
-            (Letter.toChar newLetter)
-            (\maybeOldLetter ->
-                case maybeOldLetter of
-                    Just oldLetter ->
-                        if newLetter |> Letter.isGreaterThan oldLetter then
-                            Just newLetter
-
-                        else
-                            maybeOldLetter
-
-                    Nothing ->
-                        Just newLetter
-            )
-            letters
+update : Guess -> History -> History
+update guess (History pasts) =
+    History <| List.foldl updatePast pasts guess
 
 
-getLetter : Char -> History -> Maybe Letter
-getLetter ch (History letters) =
-    Dict.get ch letters
+updatePast : Letter -> Dict Char Past -> Dict Char Past
+updatePast letter =
+    Dict.update
+        (Letter.toChar letter)
+        (\maybePast ->
+            case maybePast of
+                Just past ->
+                    if past == Possible && Letter.isCorrect letter then
+                        Just Correct
+
+                    else
+                        maybePast
+
+                Nothing ->
+                    Just <| letterToPast letter
+        )
+
+
+letterToPast : Letter -> Past
+letterToPast letter =
+    case letter of
+        Letter.Correct _ ->
+            Correct
+
+        Letter.Possible _ ->
+            Possible
+
+        Letter.Impossible _ ->
+            Impossible
+
+
+getPast : Char -> History -> Maybe Past
+getPast ch (History pasts) =
+    Dict.get ch pasts

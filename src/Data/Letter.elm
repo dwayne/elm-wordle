@@ -1,4 +1,4 @@
-module Data.Letter exposing (Letter(..), isCorrect, isGreaterThan, toChar)
+module Data.Letter exposing (Letter(..), isCorrect, toChar)
 
 
 type Letter
@@ -11,22 +11,6 @@ isCorrect : Letter -> Bool
 isCorrect letter =
     case letter of
         Correct _ ->
-            True
-
-        _ ->
-            False
-
-
-isGreaterThan : Letter -> Letter -> Bool
-isGreaterThan second first =
-    case ( first, second ) of
-        ( Correct _, Possible _ ) ->
-            True
-
-        ( Correct _, Impossible _ ) ->
-            True
-
-        ( Possible _, Impossible _ ) ->
             True
 
         _ ->
