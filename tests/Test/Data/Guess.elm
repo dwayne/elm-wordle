@@ -35,6 +35,17 @@ suite =
               , word = "sense"
               , expected = [ c 's', i 'e', p 'n', i 's', c 'e' ]
               }
+
+            --
+            -- How does it handle when a letter occurs once
+            -- but it is guessed multiple times?
+            --
+            , { answer = "apple" -- For e.g. 'e' occurs once.
+              , word = "beets" -- But, we guess it twice.
+
+              -- Only the first 'e' should be possible.
+              , expected = [ i 'b', p 'e', i 'e', i 't', i 's' ]
+              }
             ]
 
 
@@ -63,11 +74,13 @@ dictionary =
     Dictionary.new
         { wordLength = 5
         , answers =
-            [ "robot"
+            [ "apple"
+            , "robot"
             , "shine"
             ]
         , nonAnswers =
-            [ "broom"
+            [ "beets"
+            , "broom"
             , "crown"
             , "sense"
             ]

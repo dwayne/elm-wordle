@@ -27,8 +27,49 @@ guess maybeCharsInAnswers answer =
                     Answer.toChars answer
     in
     Answer.zip answer
-        >> findCorrectLetters { letters = [], chars = chars }
+        >> findCorrectLetters chars
         >> findPossibleLetters
+
+
+findCorrectLetters : Bag Char -> List ( Char, Char ) -> State
+findCorrectLetters chars =
+    List.foldl
+        (\( a, g ) state ->
+            if a == g then
+                state
+                    |> appendLetter (Letter.Correct g)
+                    |> removeChar g
+
+            else
+                state
+                    |> appendLetter (Letter.Impossible g)
+        )
+        (initState chars)
+
+
+findPossibleLetters : State -> List Letter
+findPossibleLetters { letters, chars } =
+    letters
+        |> List.foldl
+            (\letter state ->
+                case letter of
+                    Letter.Impossible ch ->
+                        if Bag.contains ch state.chars then
+                            state
+                                |> appendLetter (Letter.Possible ch)
+                                |> removeChar ch
+
+                        else
+                            appendLetter letter state
+
+                    _ ->
+                        appendLetter letter state
+            )
+            (initState chars)
+        |> .letters
+
+
+-- STATE
 
 
 type alias State =
@@ -37,40 +78,16 @@ type alias State =
     }
 
 
-findCorrectLetters : State -> List ( Char, Char ) -> State
-findCorrectLetters state pairs =
-    case pairs of
-        [] ->
-            { state | letters = List.reverse state.letters }
-
-        ( t, g ) :: restOfPairs ->
-            if t == g then
-                findCorrectLetters
-                    { state
-                        | letters = Letter.Correct g :: state.letters
-                        , chars = Bag.remove g state.chars
-                    }
-                    restOfPairs
-
-            else
-                findCorrectLetters
-                    { state | letters = Letter.Impossible g :: state.letters }
-                    restOfPairs
+initState : Bag Char -> State
+initState chars =
+    { letters = [], chars = chars }
 
 
-findPossibleLetters : State -> List Letter
-findPossibleLetters { letters, chars } =
-    List.map
-        (\letterStatus ->
-            case letterStatus of
-                Letter.Impossible ch ->
-                    if Bag.contains ch chars then
-                        Letter.Possible ch
+appendLetter : Letter -> State -> State
+appendLetter letter state =
+    { state | letters = state.letters ++ [ letter ] }
 
-                    else
-                        letterStatus
 
-                _ ->
-                    letterStatus
-        )
-        letters
+removeChar : Char -> State -> State
+removeChar ch state =
+    { state | chars = Bag.remove ch state.chars }
