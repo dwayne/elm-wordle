@@ -1,8 +1,9 @@
-module Data.Answer exposing (Answer, fromString, toChars, toString, zip)
+module Data.Answer exposing (Answer, fromString, generator, toChars, toString, zip)
 
 import Data.Bag as Bag exposing (Bag)
 import Data.Dictionary as Dictionary exposing (Dictionary)
 import Data.Word as Word exposing (Word)
+import Random
 
 
 type Answer
@@ -16,6 +17,11 @@ fromString d s =
 
     else
         Nothing
+
+
+generator : Dictionary -> Random.Generator (Maybe Answer)
+generator =
+    Dictionary.answerGenerator >> Random.map (Maybe.map Answer)
 
 
 zip : Answer -> Word -> List ( Char, Char )

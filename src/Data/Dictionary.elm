@@ -1,5 +1,13 @@
-module Data.Dictionary exposing (Dictionary, contains, containsAnswer, new)
+module Data.Dictionary exposing
+    ( Dictionary
+    , answerGenerator
+    , contains
+    , containsAnswer
+    , new
+    )
 
+import Lib.Random.Set as Set
+import Random
 import Set exposing (Set)
 
 
@@ -56,6 +64,11 @@ processWords n =
                 Nothing
         )
         >> Set.fromList
+
+
+answerGenerator : Dictionary -> Random.Generator (Maybe String)
+answerGenerator (Dictionary { answers }) =
+    Set.sample answers
 
 
 containsAnswer : String -> Dictionary -> Bool
