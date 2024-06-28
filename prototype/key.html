@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1" />
+
+    <title>Key</title>
+
+    <link rel="stylesheet" href="/index.css">
+  </head>
+  <body>
+    <h1>Key</h1>
+
+    <h2>Size</h2>
+
+    <h3>Default</h3>
+
+    <p>
+      <button class="key" type="button">q</button>
+    </p>
+
+    <h3>Large</h3>
+
+    <p>
+      <button class="key key--large" type="button">Enter</button>
+    </p>
+
+    <p>
+      <button class="key key--large" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+          <path fill="currentColor" d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"></path>
+        </svg>
+      </button>
+    </p>
+
+    <h2>Color</h2>
+
+    <h3>Correct</h3>
+
+    <p>
+      <button class="key key--color--correct" type="button">w</button>
+    </p>
+
+    <h3>Possible</h3>
+
+    <p>
+      <button class="key key--color--possible" type="button">e</button>
+    </p>
+
+    <h3>Impossible</h3>
+
+    <p>
+      <button class="key key--color--impossible" type="button">r</button>
+    </p>
+
+    <h2>Transition</h2>
+
+    <p>
+      <button id="t" class="key" type="button">t</button>
+    </p>
+    <p>
+      <button id="transition" type="button">Transition</button>
+    </p>
+    <script>
+      const t = document.getElementById('t')
+      const transition = document.getElementById('transition')
+
+      const correct = 'key--color--correct'
+      const possible = 'key--color--possible'
+
+      transition.addEventListener('click', () => {
+        if (t.classList.contains(possible)) {
+          t.classList.remove(possible)
+          t.classList.add(correct)
+        } else if (t.classList.contains(correct)) {
+          t.classList.remove(correct)
+        } else {
+          t.classList.add(possible)
+        }
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+#
+# Usage: serve-prototype [9000]
+#
+
+set -euo pipefail
+
+port="${1:-9000}"
+
+caddy file-server --browse --listen :"$port" --root "${build:?}/prototype"

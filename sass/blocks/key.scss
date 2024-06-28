@@ -1,0 +1,63 @@
+@use "../colors";
+@use "../fonts";
+
+/*button*/.key {
+  --key-width: 45px;
+  --key-background-color: #{colors.$gray-1};
+  --key-color: #{colors.$black};
+
+  // Reset button styles
+  border: 0;
+  padding: 0;
+
+  // Size
+  width: var(--key-width);
+  height: 55px;
+
+  // Shape
+  border-radius: 4px;
+
+  // Layout
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // Typography
+  font-family: fonts.$clear-sans;
+  font-weight: 700;
+  text-transform: uppercase;
+
+  // Color
+  background-color: var(--key-background-color);
+  color: var(--key-color);
+
+  // Interaction
+  cursor: pointer;
+
+  // Transition
+  transition-property: background-color, color;
+  transition-duration: 0.2s;
+}
+
+// Modifier: Size
+
+.key--large {
+  width: calc(1.5 * var(--key-width));
+}
+
+// Modifier: Color
+
+.key--color--correct {
+  --key-background-color: #{colors.$green};
+  --key-color: #{colors.$white};
+}
+
+.key--color--possible {
+  --key-background-color: #{colors.$yellow};
+  --key-color: #{colors.$white};
+}
+
+.key--color--impossible {
+  --key-background-color: #{colors.$gray-2};
+  --key-color: #{colors.$white};
+}

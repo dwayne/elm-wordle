@@ -4,6 +4,7 @@
         "version": "latest",
         "disable_plugin": true
       },
+      "dart-sass": "latest",
       "elmPackages.elm": "latest",
       "elmPackages.elm-format": "latest",
       "elmPackages.elm-test": "latest"
