@@ -15,15 +15,15 @@ suite =
         List.map
             testGuess
             [ { answer = "robot"
-              , word = "broom"
+              , guess = "broom"
               , expected = [ p 'b', p 'r', p 'o', c 'o', i 'm' ]
               }
             , { answer = "robot"
-              , word = "crown"
+              , guess = "crown"
               , expected = [ i 'c', p 'r', p 'o', i 'w', i 'n' ]
               }
             , { answer = "robot"
-              , word = "robot"
+              , guess = "robot"
               , expected = [ c 'r', c 'o', c 'b', c 'o', c 't' ]
               }
 
@@ -32,7 +32,7 @@ suite =
             -- https://github.com/Kinkelin/WordleCompetition/pull/8
             --
             , { answer = "shine"
-              , word = "sense"
+              , guess = "sense"
               , expected = [ c 's', i 'e', p 'n', i 's', c 'e' ]
               }
 
@@ -41,24 +41,41 @@ suite =
             -- but it is guessed multiple times?
             --
             , { answer = "apple" -- For e.g. 'e' occurs once.
-              , word = "beets" -- But, we guess it twice.
+              , guess = "beets" -- But, we guess it twice.
 
               -- Only the first 'e' should be possible.
               , expected = [ i 'b', p 'e', i 'e', i 't', i 's' ]
               }
+
+            --
+            -- More examples taken from
+            -- https://dev.to/denvercoder1/why-most-wordle-clones-are-wrong-390c
+            --
+            , { answer = "those"
+              , guess = "geese"
+              , expected = [ i 'g', i 'e', i 'e', c 's', c 'e' ]
+              }
+            , { answer = "dread"
+              , guess = "added"
+              , expected = [ p 'a', p 'd', i 'd', p 'e', c 'd' ]
+              }
+            , { answer = "maxim"
+              , guess = "mamma"
+              , expected = [ c 'm', c 'a', p 'm', i 'm', i 'a' ]
+              }
             ]
 
 
-testGuess : { answer : String, word : String, expected : Guess } -> Test
-testGuess { answer, word, expected } =
-    test (Debug.toString { answer = answer, word = word }) <|
+testGuess : { answer : String, guess : String, expected : Guess } -> Test
+testGuess { answer, guess, expected } =
+    test (Debug.toString { answer = answer, guess = guess }) <|
         \_ ->
             let
                 maybeAnswer =
                     Answer.fromString dictionary answer
 
                 maybeGuess =
-                    Word.fromString dictionary word
+                    Word.fromString dictionary guess
 
                 maybeExpected =
                     Just expected
@@ -75,13 +92,19 @@ dictionary =
         { wordLength = 5
         , answers =
             [ "apple"
+            , "dread"
+            , "maxim"
             , "robot"
             , "shine"
+            , "those"
             ]
         , nonAnswers =
-            [ "beets"
+            [ "added"
+            , "beets"
             , "broom"
             , "crown"
+            , "geese"
+            , "mamma"
             , "sense"
             ]
         }
