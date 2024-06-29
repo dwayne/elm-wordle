@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1" />
+
+    <title>Keyboard</title>
+
+    <link rel="stylesheet" href="/index.css">
+  </head>
+  <body>
+    <h1>Keyboard</h1>
+
+    <p>Initially, the keyboard looks like:</p>
+
+    <div class="keyboard">
+      <div class="keyboard__row">
+        <button class="key" type="button">q</button>
+        <button class="key" type="button">w</button>
+        <button class="key" type="button">e</button>
+        <button class="key" type="button">r</button>
+        <button class="key" type="button">t</button>
+        <button class="key" type="button">y</button>
+        <button class="key" type="button">u</button>
+        <button class="key" type="button">i</button>
+        <button class="key" type="button">o</button>
+        <button class="key" type="button">p</button>
+      </div>
+      <div class="keyboard__row">
+        <button class="key" type="button">a</button>
+        <button class="key" type="button">s</button>
+        <button class="key" type="button">d</button>
+        <button class="key" type="button">f</button>
+        <button class="key" type="button">g</button>
+        <button class="key" type="button">h</button>
+        <button class="key" type="button">j</button>
+        <button class="key" type="button">k</button>
+        <button class="key" type="button">l</button>
+      </div>
+      <div class="keyboard__row">
+        <button class="key key--large" type="button">Enter</button>
+        <button class="key" type="button">z</button>
+        <button class="key" type="button">x</button>
+        <button class="key" type="button">c</button>
+        <button class="key" type="button">v</button>
+        <button class="key" type="button">b</button>
+        <button class="key" type="button">n</button>
+        <button class="key" type="button">m</button>
+        <button class="key key--large" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+            <path fill="currentColor" d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <p>And, after a few guesses it looks like:</p>
+
+    <div class="keyboard">
+      <div class="keyboard__row">
+        <button class="key" type="button">q</button>
+        <button class="key" type="button">w</button>
+        <button class="key key--color--correct" type="button">e</button>
+        <button class="key key--color--impossible" type="button">r</button>
+        <button class="key" type="button">t</button>
+        <button class="key" type="button">y</button>
+        <button class="key" type="button">u</button>
+        <button class="key" type="button">i</button>
+        <button class="key" type="button">o</button>
+        <button class="key key--color--impossible" type="button">p</button>
+      </div>
+      <div class="keyboard__row">
+        <button class="key key--color--possible" type="button">a</button>
+        <button class="key key--color--impossible" type="button">s</button>
+        <button class="key" type="button">d</button>
+        <button class="key" type="button">f</button>
+        <button class="key key--color--impossible" type="button">g</button>
+        <button class="key key--color--impossible" type="button">h</button>
+        <button class="key" type="button">j</button>
+        <button class="key" type="button">k</button>
+        <button class="key" type="button">l</button>
+      </div>
+      <div class="keyboard__row">
+        <button class="key key--large" type="button">Enter</button>
+        <button class="key" type="button">z</button>
+        <button class="key" type="button">x</button>
+        <button class="key" type="button">c</button>
+        <button class="key key--color--impossible" type="button">v</button>
+        <button class="key" type="button">b</button>
+        <button class="key" type="button">n</button>
+        <button class="key" type="button">m</button>
+        <button class="key key--large" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+            <path fill="currentColor" d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
