@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1" />
+
+    <title>Letter</title>
+
+    <link rel="stylesheet" href="/index.css">
+  </head>
+  <body>
+    <h1>Letter</h1>
+
+    <h2>Empty</h2>
+
+    <div class="letter"></div>
+
+    <h2>Non-empty</h2>
+
+    <div class="letter">q</div>
+
+    <h2>Color</h2>
+
+    <h3>Correct</h3>
+
+    <div class="letter letter--color--correct">w</div>
+
+    <h3>Possible</h3>
+
+    <div class="letter letter--color--possible">e</div>
+
+    <h3>Impossible</h3>
+
+    <div class="letter letter--color--impossible">r</div>
+
+    <h2>Animation</h2>
+
+    <h3>Appear</h3>
+
+    <div id="letter-to-appear" class="letter">t</div>
+    <p><button id="appear">Appear</button></p>
+    <script>
+      const letterToAppear = document.getElementById('letter-to-appear')
+      const appear = document.getElementById('appear')
+
+      appear.addEventListener('click', () => {
+        letterToAppear.classList.add('letter--animation--appear')
+        appear.setAttribute('disabled', '')
+      })
+
+      letterToAppear.addEventListener('animationend', () => {
+        letterToAppear.classList.remove('letter--animation--appear')
+        appear.removeAttribute('disabled')
+      })
+    </script>
+
+    <h3>Reveal</h3>
+
+    <div id="letter-to-reveal" class="letter letter--color--possible">y</div>
+    <p><button id="reveal">Reveal</button></p>
+    <script>
+      const letterToReveal = document.getElementById('letter-to-reveal')
+      const reveal = document.getElementById('reveal')
+
+      reveal.addEventListener('click', () => {
+        letterToReveal.classList.add('letter--animation--reveal')
+        reveal.setAttribute('disabled', '')
+      })
+
+      letterToReveal.addEventListener('animationend', () => {
+        letterToReveal.classList.remove('letter--animation--reveal')
+        reveal.removeAttribute('disabled')
+      })
+    </script>
+  </body>
+</html>

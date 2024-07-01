@@ -1,10 +1,9 @@
 @use "../colors";
-@use "../fonts";
 
 /*button*/.key {
   --key-width: 45px;
   --key-background-color: #{colors.$gray-1};
-  --key-color: #{colors.$black};
+  --key-color: #{colors.$black-2};
 
   // Reset button styles
   border: 0;
@@ -23,7 +22,7 @@
   justify-content: center;
 
   // Typography
-  font-family: fonts.$clear-sans;
+  font-family: inherit;
   font-weight: 700;
   text-transform: uppercase;
 
