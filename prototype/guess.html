@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1" />
+
+    <title>Guess</title>
+
+    <link rel="stylesheet" href="/index.css">
+  </head>
+  <body>
+    <h1>Guess</h1>
+
+    <h2>Empty</h2>
+
+    <div class="guess">
+      <div class="letter"></div>
+      <div class="letter"></div>
+      <div class="letter"></div>
+      <div class="letter"></div>
+      <div class="letter"></div>
+    </div>
+
+    <h2>Make a guess</h2>
+
+    <p>Use the buttons below to add/remove letters to make a guess.</p>
+
+    <div id="a-guess" class="guess">
+      <div class="letter">p</div>
+      <div class="letter">a</div>
+      <div class="letter"></div>
+      <div class="letter"></div>
+      <div class="letter"></div>
+    </div>
+    <p><button id="add">Add</button> <button id="remove">Remove</button></p>
+    <script>
+      const addButton = document.getElementById('add')
+      const removeButton = document.getElementById('remove')
+      const letters = ['p', 'a', 'g', 'e', 'r']
+      let lettersIndex = 2
+
+      addButton.addEventListener('click', () => {
+        const letter = document.querySelector('#a-guess .letter:empty')
+
+        if (letter && lettersIndex < 5) {
+          letter.textContent = letters[lettersIndex++]
+          letter.classList.add('letter--animation--appear')
+        }
+      })
+
+      removeButton.addEventListener('click', (e) => {
+        const letter = Array.from(document.querySelectorAll('#a-guess .letter:not(:empty)')).slice(-1)[0]
+
+        if (letter) {
+          letter.textContent = null
+          letter.classList.remove('letter--animation--appear')
+          lettersIndex--
+        }
+      })
+    </script>
+
+    <h2>Reveal the outcome</h2>
+
+    <p>Use the "Reveal" button below to reveal the outcome of a guess.</p>
+
+    <div id="a-reveal" class="guess">
+      <div class="letter letter--animation--appear">p</div>
+      <div class="letter letter--animation--appear">a</div>
+      <div class="letter letter--animation--appear">g</div>
+      <div class="letter letter--animation--appear">e</div>
+      <div class="letter letter--animation--appear">r</div>
+    </div>
+    <p><button id="reveal">Reveal</button> <button id="reset">Reset</button></p>
+    <script>
+      const container = document.getElementById('a-reveal')
+      const revealButton = document.getElementById('reveal')
+      const resetButton = document.getElementById('reset')
+      const colors = ['possible', 'possible', 'impossible', 'correct', 'impossible']
+      let colorsIndex = 0
+
+      function revealLetter (letter) {
+        if (letter && colorsIndex < 5) {
+          letter.classList.remove('letter--animation--appear')
+          letter.classList.add(`letter--color--${colors[colorsIndex++]}`)
+          letter.classList.add('letter--animation--reveal')
+        }
+      }
+
+      container.addEventListener('animationend', (e) => {
+        if (e.animationName === 'reveal') {
+          const letter = document.querySelector('#a-reveal .letter:not(.letter--animation--reveal)')
+
+          revealLetter(letter)
+        }
+      })
+
+      revealButton.addEventListener('click', () => {
+        const firstLetter = document.querySelector('#a-reveal .letter')
+
+        revealLetter(firstLetter)
+      })
+
+      resetButton.addEventListener('click', () => {
+        const letters = document.querySelectorAll('#a-reveal .letter')
+
+        letters.forEach(letter => {
+          letter.classList.remove('letter--color--correct')
+          letter.classList.remove('letter--color--possible')
+          letter.classList.remove('letter--color--impossible')
+          letter.classList.remove('letter--animation--reveal')
+        })
+
+        colorsIndex = 0
+      })
+    </script>
+  </body>
+</html>
