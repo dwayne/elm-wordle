@@ -1,12 +1,15 @@
 @use "../colors";
 
+$width: 62px;
+$height: $width;
+
 .letter {
   --letter-background-color: #{colors.$white};
   --letter-color: #{colors.$black-1};
 
   // Size
-  width: 62px;
-  height: 62px;
+  width: $width;
+  height: $height;
 
   // Shape
   border: 2px solid colors.$gray-3;
@@ -51,34 +54,4 @@
 .letter--color--possible,
 .letter--color--impossible {
   border: 0;
-}
-
-// Modifier: Animation
-
-.letter--animation--appear {
-  animation: appear 0.2s;
-}
-
-@keyframes appear {
-  0% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.letter--animation--reveal {
-  backface-visibility: hidden;
-  animation: reveal 0.6s;
-}
-
-@keyframes reveal {
-  0% {
-    transform: rotateX(180deg);
-  }
-
-  100% {
-    transform: rotateX(0deg);
-  }
 }

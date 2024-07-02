@@ -6,6 +6,14 @@
 
     <title>Guess</title>
 
+    <!-- TODO:
+
+    1. Handle when not given enough letters. (Not enough letters)
+    2. Handle when a guess is not a word. (Not in word list)
+
+    Both cases use a shake animation.
+    -->
+
     <link rel="stylesheet" href="/index.css">
   </head>
   <body>
@@ -14,11 +22,36 @@
     <h2>Empty</h2>
 
     <div class="guess">
-      <div class="letter"></div>
-      <div class="letter"></div>
-      <div class="letter"></div>
-      <div class="letter"></div>
-      <div class="letter"></div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter"></div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter"></div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter"></div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter"></div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter"></div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
     </div>
 
     <h2>Make a guess</h2>
@@ -26,36 +59,67 @@
     <p>Use the buttons below to add/remove letters to make a guess.</p>
 
     <div id="a-guess" class="guess">
-      <div class="letter">p</div>
-      <div class="letter">a</div>
-      <div class="letter"></div>
-      <div class="letter"></div>
-      <div class="letter"></div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter">p</div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter">a</div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter"></div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter"></div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter"></div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
     </div>
     <p><button id="add">Add</button> <button id="remove">Remove</button></p>
     <script>
-      const addButton = document.getElementById('add')
-      const removeButton = document.getElementById('remove')
-      const letters = ['p', 'a', 'g', 'e', 'r']
-      let lettersIndex = 2
+      window.addEventListener('load', () => {
+        const addButton = document.getElementById('add')
+        const removeButton = document.getElementById('remove')
+        const letters = ['p', 'a', 'g', 'e', 'r']
+        let lettersIndex = 2
 
-      addButton.addEventListener('click', () => {
-        const letter = document.querySelector('#a-guess .letter:empty')
+        addButton.addEventListener('click', () => {
+          const letter = document.querySelector('#a-guess .letter:empty')
 
-        if (letter && lettersIndex < 5) {
-          letter.textContent = letters[lettersIndex++]
-          letter.classList.add('letter--animation--appear')
-        }
-      })
+          if (letter && lettersIndex < 5) {
+            const tile = letter.closest('.tile')
 
-      removeButton.addEventListener('click', (e) => {
-        const letter = Array.from(document.querySelectorAll('#a-guess .letter:not(:empty)')).slice(-1)[0]
+            letter.textContent = letters[lettersIndex++]
+            tile.classList.add('tile--animation--appear')
+          }
+        })
 
-        if (letter) {
-          letter.textContent = null
-          letter.classList.remove('letter--animation--appear')
-          lettersIndex--
-        }
+        removeButton.addEventListener('click', (e) => {
+          const letter = Array.from(document.querySelectorAll('#a-guess .letter:not(:empty)')).slice(-1)[0]
+
+          if (letter) {
+            const tile = letter.closest('.tile')
+
+            letter.textContent = null
+            lettersIndex--
+            tile.classList.remove('tile--animation--appear')
+          }
+        })
       })
     </script>
 
@@ -64,53 +128,65 @@
     <p>Use the "Reveal" button below to reveal the outcome of a guess.</p>
 
     <div id="a-reveal" class="guess">
-      <div class="letter letter--animation--appear">p</div>
-      <div class="letter letter--animation--appear">a</div>
-      <div class="letter letter--animation--appear">g</div>
-      <div class="letter letter--animation--appear">e</div>
-      <div class="letter letter--animation--appear">r</div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter">p</div>
+        </div>
+        <div class="tile__back">
+          <div class="letter letter--color--possible">p</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter">a</div>
+        </div>
+        <div class="tile__back">
+          <div class="letter letter--color--possible">a</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter">g</div>
+        </div>
+        <div class="tile__back">
+          <div class="letter letter--color--impossible">g</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter">e</div>
+        </div>
+        <div class="tile__back">
+          <div class="letter letter--color--correct">e</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter">r</div>
+        </div>
+        <div class="tile__back">
+          <div class="letter letter--color--impossible">r</div>
+        </div>
+      </div>
     </div>
     <p><button id="reveal">Reveal</button> <button id="reset">Reset</button></p>
     <script>
-      const container = document.getElementById('a-reveal')
-      const revealButton = document.getElementById('reveal')
-      const resetButton = document.getElementById('reset')
-      const colors = ['possible', 'possible', 'impossible', 'correct', 'impossible']
-      let colorsIndex = 0
+      window.addEventListener('load', () => {
+        const revealButton = document.getElementById('reveal')
+        const resetButton = document.getElementById('reset')
+        const tiles = document.querySelectorAll('#a-reveal .tile')
 
-      function revealLetter (letter) {
-        if (letter && colorsIndex < 5) {
-          letter.classList.remove('letter--animation--appear')
-          letter.classList.add(`letter--color--${colors[colorsIndex++]}`)
-          letter.classList.add('letter--animation--reveal')
-        }
-      }
-
-      container.addEventListener('animationend', (e) => {
-        if (e.animationName === 'reveal') {
-          const letter = document.querySelector('#a-reveal .letter:not(.letter--animation--reveal)')
-
-          revealLetter(letter)
-        }
-      })
-
-      revealButton.addEventListener('click', () => {
-        const firstLetter = document.querySelector('#a-reveal .letter')
-
-        revealLetter(firstLetter)
-      })
-
-      resetButton.addEventListener('click', () => {
-        const letters = document.querySelectorAll('#a-reveal .letter')
-
-        letters.forEach(letter => {
-          letter.classList.remove('letter--color--correct')
-          letter.classList.remove('letter--color--possible')
-          letter.classList.remove('letter--color--impossible')
-          letter.classList.remove('letter--animation--reveal')
+        revealButton.addEventListener('click', () => {
+          tiles.forEach(tile => {
+            tile.classList.add('tile--animation--flip')
+          })
         })
 
-        colorsIndex = 0
+        resetButton.addEventListener('click', () => {
+          tiles.forEach(tile => {
+            tile.classList.remove('tile--animation--flip')
+          })
+        })
       })
     </script>
   </body>

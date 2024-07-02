@@ -1,0 +1,78 @@
+@use "letter";
+
+$num-per-guess: 5 !default;
+$appear-duration: 0.2s !default;
+$flip-duration: 0.6s !default;
+$flip-delay-step: 300ms !default;
+
+.tile__front, .tile__back {
+  width: letter.$width;
+  height: letter.$height;
+}
+
+.tile__front, .tile__back {
+  backface-visibility: hidden;
+}
+
+.tile__back {
+  transform: rotateX(180deg);
+}
+
+.tile {
+  position: relative;
+}
+
+.tile__back {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+// Modifier: Animation
+
+.tile--animation--appear .tile__front {
+  animation: appear $appear-duration;
+}
+
+@keyframes appear {
+  0% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.tile--animation--flip .tile__front {
+  animation: flip-front $flip-duration forwards;
+}
+
+.tile--animation--flip .tile__back {
+  animation: flip-back $flip-duration forwards;
+}
+
+@for $i from 1 through $num-per-guess {
+  .tile--animation--flip:nth-child(#{$i}) {
+    .tile__front, .tile__back {
+      animation-delay: #{($i - 1) * $flip-delay-step};
+    }
+  }
+}
+
+@keyframes flip-front {
+  0% {
+    transform: rotateX(0deg);
+  }
+  100% {
+    transform: rotateX(180deg);
+  }
+}
+
+@keyframes flip-back {
+  0% {
+    transform: rotateX(180deg);
+  }
+  100% {
+    transform: rotateX(360deg);
+  }
+}
