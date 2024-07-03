@@ -1,13 +1,14 @@
-@use "letter";
+$width: 65px !default;
+$height: $width !default;
 
-$num-per-guess: 5 !default;
+$count: 5 !default;
 $appear-duration: 0.2s !default;
 $flip-duration: 0.6s !default;
 $flip-delay-step: 300ms !default;
 
 .tile__front, .tile__back {
-  width: letter.$width;
-  height: letter.$height;
+  width: $width;
+  height: $height;
 }
 
 .tile__front, .tile__back {
@@ -51,7 +52,7 @@ $flip-delay-step: 300ms !default;
   animation: flip-back $flip-duration forwards;
 }
 
-@for $i from 1 through $num-per-guess {
+@for $i from 1 through $count {
   .tile--animation--flip:nth-child(#{$i}) {
     .tile__front, .tile__back {
       animation-delay: #{($i - 1) * $flip-delay-step};

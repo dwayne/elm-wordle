@@ -1,15 +1,12 @@
 @use "../colors";
 
-$width: 62px;
-$height: $width;
-
 .letter {
   --letter-background-color: #{colors.$white};
   --letter-color: #{colors.$black-1};
 
   // Size
-  width: $width;
-  height: $height;
+  width: 100%;
+  height: 100%;
 
   // Shape
   border: 2px solid colors.$gray-3;
@@ -33,25 +30,23 @@ $height: $width;
   border-color: colors.$gray-1;
 }
 
-// Modifier: Color
+// Modifier: Result
 
-.letter--color--correct {
+.letter--result--correct {
   --letter-background-color: #{colors.$correct};
-  --letter-color: #{colors.$white};
 }
 
-.letter--color--possible {
+.letter--result--possible {
   --letter-background-color: #{colors.$possible};
-  --letter-color: #{colors.$white};
 }
 
-.letter--color--impossible {
+.letter--result--impossible {
   --letter-background-color: #{colors.$impossible};
-  --letter-color: #{colors.$white};
 }
 
-.letter--color--correct,
-.letter--color--possible,
-.letter--color--impossible {
+.letter--result--correct,
+.letter--result--possible,
+.letter--result--impossible {
+  --letter-color: #{colors.$white};
   border: 0;
 }
