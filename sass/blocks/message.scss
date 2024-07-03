@@ -1,0 +1,15 @@
+@use "../colors";
+
+.message {
+  // Color
+  background-color: colors.$black-3;
+  color: colors.$white;
+
+  // Shape
+  display: inline-block;
+  border-radius: 4px;
+  padding: 16px 20px;
+
+  // Typography
+  font-weight: 600;
+}
