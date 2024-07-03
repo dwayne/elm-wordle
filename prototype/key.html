@@ -33,24 +33,26 @@
       </button>
     </p>
 
-    <h2>Color</h2>
+    <h2>Past</h2>
+
+    <p>What's the history of a given key? Its <em>past</em>?</p>
 
     <h3>Correct</h3>
 
     <p>
-      <button class="key key--color--correct" type="button">w</button>
+      <button class="key key--past--correct" type="button">w</button>
     </p>
 
     <h3>Possible</h3>
 
     <p>
-      <button class="key key--color--possible" type="button">e</button>
+      <button class="key key--past--possible" type="button">e</button>
     </p>
 
     <h3>Impossible</h3>
 
     <p>
-      <button class="key key--color--impossible" type="button">r</button>
+      <button class="key key--past--impossible" type="button">r</button>
     </p>
 
     <h2>Transition</h2>
@@ -65,8 +67,8 @@
       const t = document.getElementById('t')
       const transition = document.getElementById('transition')
 
-      const correct = 'key--color--correct'
-      const possible = 'key--color--possible'
+      const correct = 'key--past--correct'
+      const possible = 'key--past--possible'
 
       transition.addEventListener('click', () => {
         if (t.classList.contains(possible)) {

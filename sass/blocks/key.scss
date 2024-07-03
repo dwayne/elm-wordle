@@ -44,19 +44,19 @@
   width: calc(1.5 * var(--key-width));
 }
 
-// Modifier: Color
+// Modifier: Past
 
-.key--color--correct {
+.key--past--correct {
   --key-background-color: #{colors.$correct};
   --key-color: #{colors.$white};
 }
 
-.key--color--possible {
+.key--past--possible {
   --key-background-color: #{colors.$possible};
   --key-color: #{colors.$white};
 }
 
-.key--color--impossible {
+.key--past--impossible {
   --key-background-color: #{colors.$impossible};
   --key-color: #{colors.$white};
 }
