@@ -6,14 +6,6 @@
 
     <title>Guess</title>
 
-    <!-- TODO:
-
-    1. Handle when not given enough letters. (Not enough letters)
-    2. Handle when a guess is not a word. (Not in word list)
-
-    Both cases use a shake animation.
-    -->
-
     <link rel="stylesheet" href="/index.css">
   </head>
   <body class="body">
@@ -123,9 +115,113 @@
       })
     </script>
 
+    <h2>Not enough letters</h2>
+
+    <div id="not-enough-letters-guess" class="guess">
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter">p</div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter">a</div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter">s</div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter"></div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter"></div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+    </div>
+    <p><button id="not-enough-letters-button">Not enough letters</button></p>
+    <script>
+      window.addEventListener('load', () => {
+        const guess = document.getElementById('not-enough-letters-guess')
+        const button = document.getElementById('not-enough-letters-button')
+
+        guess.addEventListener('animationend', () => {
+          guess.classList.remove('guess--animation--shake')
+          button.removeAttribute('disabled')
+        })
+
+        button.addEventListener('click', () => {
+          guess.classList.add('guess--animation--shake')
+          button.setAttribute('disabled', '')
+        })
+      })
+    </script>
+
+    <h2>Not in word list</h2>
+
+    <div id="not-in-word-list-guess" class="guess">
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter">p</div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter">a</div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter">s</div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter">d</div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+      <div class="tile">
+        <div class="tile__front">
+          <div class="letter">f</div>
+        </div>
+        <div class="tile__back"></div>
+      </div>
+    </div>
+    <p><button id="not-in-word-list-button">Not in word list</button></p>
+    <script>
+      window.addEventListener('load', () => {
+        const guess = document.getElementById('not-in-word-list-guess')
+        const button = document.getElementById('not-in-word-list-button')
+
+        guess.addEventListener('animationend', () => {
+          guess.classList.remove('guess--animation--shake')
+          button.removeAttribute('disabled')
+        })
+
+        button.addEventListener('click', () => {
+          guess.classList.add('guess--animation--shake')
+          button.setAttribute('disabled', '')
+        })
+      })
+    </script>
+
     <h2>Reveal</h2>
 
-    <p><em>Reveal</em> the outcome of a guess.</p>
+    <p><em>Reveal</em> the outcome of a valid guess.</p>
 
     <div id="a-reveal" class="guess">
       <div class="tile">
@@ -176,16 +272,28 @@
         const resetButton = document.getElementById('reset')
         const tiles = document.querySelectorAll('#a-reveal .tile')
 
+        resetButton.setAttribute('disabled', '')
+
+        const lastTile = Array.from(tiles).slice(-1)[0]
+        if (lastTile) {
+          lastTile.addEventListener('animationend', () => {
+            resetButton.removeAttribute('disabled')
+          })
+        }
+
         revealButton.addEventListener('click', () => {
           tiles.forEach(tile => {
             tile.classList.add('tile--animation--flip')
           })
+          revealButton.setAttribute('disabled', '')
         })
 
         resetButton.addEventListener('click', () => {
           tiles.forEach(tile => {
             tile.classList.remove('tile--animation--flip')
           })
+          revealButton.removeAttribute('disabled')
+          resetButton.setAttribute('disabled', '')
         })
       })
     </script>
