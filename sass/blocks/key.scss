@@ -1,7 +1,9 @@
 @use "../colors";
 
+$width: 45px !default;
+$height: 55px !default;
+
 /*button*/.key {
-  --key-width: 45px;
   --key-background-color: #{colors.$gray-1};
   --key-color: #{colors.$black-2};
 
@@ -10,8 +12,8 @@
   padding: 0;
 
   // Size
-  width: var(--key-width);
-  height: 55px;
+  width: $width;
+  height: $height;
 
   // Shape
   border-radius: 4px;
@@ -41,7 +43,7 @@
 // Modifier: Size
 
 .key--large {
-  width: calc(1.5 * var(--key-width));
+  width: 1.5 * $width;
 }
 
 // Modifier: Past
