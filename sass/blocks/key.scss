@@ -47,16 +47,16 @@
 // Modifier: Color
 
 .key--color--correct {
-  --key-background-color: #{colors.$green};
+  --key-background-color: #{colors.$correct};
   --key-color: #{colors.$white};
 }
 
 .key--color--possible {
-  --key-background-color: #{colors.$yellow};
+  --key-background-color: #{colors.$possible};
   --key-color: #{colors.$white};
 }
 
 .key--color--impossible {
-  --key-background-color: #{colors.$gray-2};
+  --key-background-color: #{colors.$impossible};
   --key-color: #{colors.$white};
 }

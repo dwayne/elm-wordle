@@ -36,17 +36,17 @@ $height: $width;
 // Modifier: Color
 
 .letter--color--correct {
-  --letter-background-color: #{colors.$green};
+  --letter-background-color: #{colors.$correct};
   --letter-color: #{colors.$white};
 }
 
 .letter--color--possible {
-  --letter-background-color: #{colors.$yellow};
+  --letter-background-color: #{colors.$possible};
   --letter-color: #{colors.$white};
 }
 
 .letter--color--impossible {
-  --letter-background-color: #{colors.$gray-2};
+  --letter-background-color: #{colors.$impossible};
   --letter-color: #{colors.$white};
 }
 
