@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+#
+# Usage: build-elm input-file output-file
+#
+
+set -euo pipefail
+
+inputFile="${1:?}"
+outputFile="${2:?}"
+
+elm make "$inputFile" --debug --output "$outputFile"

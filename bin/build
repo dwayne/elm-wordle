@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+#
+# Usage: build
+#
+
+set -euo pipefail
+
+src="${project:?}"
+out="${build:?}/application"
+
+clean () {
+  rm -rf "$out"
+}
+
+prepare () {
+  mkdir -p "$out"
+}
+
+build_public () {
+  cp -r "$src/public/"* "$out"
+}
+
+build_sass () {
+  build-sass "$out"
+}
+
+build_elm () {
+  build-elm "$src/src/Main.elm" "$out/app.js"
+}
+
+clean && prepare && build_public && build_sass && build_elm
