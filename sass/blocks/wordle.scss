@@ -1,0 +1,16 @@
+@use "../colors";
+
+.wordle__header {
+  text-align: center;
+  padding: 15px 0;
+  border-bottom: 1px solid colors.$gray-1;
+
+  margin-bottom: 60px;
+}
+
+.wordle__guesses {
+  display: flex;
+  justify-content: center;
+
+  margin-bottom: 60px;
+}
