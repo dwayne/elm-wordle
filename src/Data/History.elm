@@ -1,4 +1,4 @@
-module Data.History exposing (History, empty, getPast, update)
+module Data.History exposing (History, Past(..), empty, getPast, update)
 
 import Data.Guess exposing (Guess)
 import Data.Letter as Letter exposing (Letter)
