@@ -1,13 +1,11 @@
-@use "letter";
-
 $count: 5 !default;
 $appear-duration: 0.2s !default;
 $flip-duration: 0.6s !default;
 $flip-delay-step: 300ms !default;
 
 .tile__front, .tile__back {
-  width: letter.$width;
-  height: letter.$height;
+  width: var(--tile-width);
+  height: var(--tile-height);
 }
 
 .tile__front, .tile__back {

@@ -1,15 +1,9 @@
 @use "../colors";
 
-$width: 65px !default;
-$height: $width !default;
-
 .letter {
-  --letter-background-color: #{colors.$white};
-  --letter-color: #{colors.$black-1};
-
   // Size
-  width: $width;
-  height: $height;
+  width: var(--letter-width);
+  height: var(--letter-height);
 
   // Shape
   border: 2px solid colors.$gray-3;
@@ -21,12 +15,12 @@ $height: $width !default;
 
   // Typography
   font-weight: 700;
-  font-size: 2rem;
+  font-size: var(--letter-font-size);
   text-transform: uppercase;
 
   // Color
-  background-color: var(--letter-background-color);
-  color: var(--letter-color);
+  background-color: colors.$white;
+  color: colors.$black-1;
 }
 
 .letter:empty {
@@ -36,20 +30,20 @@ $height: $width !default;
 // Modifier: Result
 
 .letter--result--correct {
-  --letter-background-color: #{colors.$correct};
+  background-color: colors.$correct;
 }
 
 .letter--result--possible {
-  --letter-background-color: #{colors.$possible};
+  background-color: colors.$possible;
 }
 
 .letter--result--impossible {
-  --letter-background-color: #{colors.$impossible};
+  background-color: colors.$impossible;
 }
 
 .letter--result--correct,
 .letter--result--possible,
 .letter--result--impossible {
-  --letter-color: #{colors.$white};
+  color: colors.$white;
   border: 0;
 }

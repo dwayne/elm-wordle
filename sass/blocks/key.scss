@@ -1,19 +1,13 @@
 @use "../colors";
 
-$width: 45px !default;
-$height: 55px !default;
-
 /*button*/.key {
-  --key-background-color: #{colors.$gray-1};
-  --key-color: #{colors.$black-2};
-
   // Reset button styles
   border: 0;
   padding: 0;
 
   // Size
-  width: $width;
-  height: $height;
+  width: var(--key-width);
+  height: var(--key-height);
 
   // Shape
   border-radius: 4px;
@@ -29,8 +23,8 @@ $height: 55px !default;
   text-transform: uppercase;
 
   // Color
-  background-color: var(--key-background-color);
-  color: var(--key-color);
+  background-color: colors.$gray-1;
+  color: colors.$black-2;
 
   // Interaction
   cursor: pointer;
@@ -43,22 +37,23 @@ $height: 55px !default;
 // Modifier: Size
 
 .key--large {
-  width: 1.5 * $width;
+  width: calc(1.5 * var(--key-width));
+  font-size: var(--key-large-font-size);
 }
 
 // Modifier: Past
 
 .key--past--correct {
-  --key-background-color: #{colors.$correct};
-  --key-color: #{colors.$white};
+  background-color: colors.$correct;
+  color: colors.$white;
 }
 
 .key--past--possible {
-  --key-background-color: #{colors.$possible};
-  --key-color: #{colors.$white};
+  background-color: colors.$possible;
+  color: colors.$white;
 }
 
 .key--past--impossible {
-  --key-background-color: #{colors.$impossible};
-  --key-color: #{colors.$white};
+  background-color: colors.$impossible;
+  color: colors.$white;
 }
