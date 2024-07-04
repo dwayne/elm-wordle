@@ -1,5 +1,4 @@
-$width: 65px !default;
-$height: $width !default;
+@use "letter";
 
 $count: 5 !default;
 $appear-duration: 0.2s !default;
@@ -7,8 +6,8 @@ $flip-duration: 0.6s !default;
 $flip-delay-step: 300ms !default;
 
 .tile__front, .tile__back {
-  width: $width;
-  height: $height;
+  width: letter.$width;
+  height: letter.$height;
 }
 
 .tile__front, .tile__back {

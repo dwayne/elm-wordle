@@ -1,12 +1,15 @@
 @use "../colors";
 
+$width: 65px !default;
+$height: $width !default;
+
 .letter {
   --letter-background-color: #{colors.$white};
   --letter-color: #{colors.$black-1};
 
   // Size
-  width: 100%;
-  height: 100%;
+  width: $width;
+  height: $height;
 
   // Shape
   border: 2px solid colors.$gray-3;
