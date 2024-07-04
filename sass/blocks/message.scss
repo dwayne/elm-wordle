@@ -8,8 +8,9 @@
   // Shape
   display: inline-block;
   border-radius: 4px;
-  padding: 16px 20px;
+  padding: var(--message-padding-vertical) var(--message-padding-horizontal);
 
   // Typography
   font-weight: 600;
+  font-size: var(--message-font-size);
 }

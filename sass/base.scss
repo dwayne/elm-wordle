@@ -20,6 +20,10 @@
   --key-large-font-size: 0.65rem;
 
   --wordle-section-gap: 40px;
+
+  --message-padding-vertical: 8px;
+  --message-padding-horizontal: 12px;
+  --message-font-size: 0.8rem;
 }
 
 @media screen and (min-width: 600px) {
@@ -32,6 +36,10 @@
     --key-large-font-size: 1rem;
 
     --wordle-section-gap: 60px;
+
+    --message-padding-vertical: 12px;
+    --message-padding-horizontal: 14px;
+    --message-font-size: 1rem;
   }
 }
 
