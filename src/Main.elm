@@ -14,6 +14,7 @@ main =
         }
 
 
+
 -- MODEL
 
 
@@ -28,6 +29,7 @@ init _ =
     )
 
 
+
 -- UPDATE
 
 
@@ -40,6 +42,7 @@ update msg model =
     case msg of
         NoOp ->
             ( model, Cmd.none )
+
 
 
 -- VIEW
