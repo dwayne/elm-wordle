@@ -1,4 +1,4 @@
-module View.Keyboard exposing (ViewOptions, view)
+module View.Keyboard exposing (Key(..), ViewOptions, view)
 
 import Data.History as History exposing (History)
 import Html as H

@@ -31,25 +31,32 @@ main =
 
 
 type Model
-    = Loading Dictionary
+    = Loading
     | InProgress InProgressModel
     | Error String
 
 
 type alias InProgressModel =
-    { dictionary : Dictionary
-    , wordle : Wordle
+    { wordle : Wordle
     , current : List Char
     }
 
 
+--
+-- N.B. I removed the dictionary from within the model
+-- since it is really large and it seems to be causing
+-- problems with the debugger when messages are generated
+-- and/or the model is changed. I was getting a
+-- TOO MUCH RECURSION error from the JavaScript.
+--
+dictionary : Dictionary
+dictionary =
+    Classic.dictionary
+
+
 init : () -> ( Model, Cmd Msg )
 init _ =
-    let
-        dictionary =
-            Classic.dictionary
-    in
-    ( Loading dictionary
+    ( Loading
     , Random.generate GeneratedMaybeAnswer (Answer.generator dictionary)
     )
 
@@ -60,23 +67,22 @@ init _ =
 
 type Msg
     = GeneratedMaybeAnswer (Maybe Answer)
+    | KeyPressed View.Keyboard.Key
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
     case model of
-        Loading dictionary ->
+        Loading ->
             case msg of
                 GeneratedMaybeAnswer maybeAnswer ->
                     case maybeAnswer of
                         Just answer ->
                             ( InProgress
-                                { dictionary = dictionary
-
                                 --
                                 -- TODO: Remove hardcoded numGuessesAllowed.
                                 --
-                                , wordle = Wordle.start 6 answer
+                                { wordle = Wordle.start 6 answer
                                 , current = []
                                 }
                             , Cmd.none
@@ -87,8 +93,26 @@ update msg model =
                             , Cmd.none
                             )
 
-        InProgress { dictionary, wordle } ->
-            ( model, Cmd.none )
+                KeyPressed _ ->
+                    ( model, Cmd.none )
+
+        InProgress inProgressModel ->
+            case msg of
+                GeneratedMaybeAnswer _ ->
+                    ( model, Cmd.none )
+
+                KeyPressed key ->
+                    case key of
+                        View.Keyboard.Letter ch ->
+                            ( InProgress { inProgressModel | current = inProgressModel.current ++ [ ch ] }
+                            , Cmd.none
+                            )
+
+                        View.Keyboard.Enter ->
+                            ( model, Cmd.none )
+
+                        View.Keyboard.Delete ->
+                            ( model, Cmd.none )
 
         Error _ ->
             ( model, Cmd.none )
@@ -98,10 +122,10 @@ update msg model =
 -- VIEW
 
 
-view : Model -> H.Html msg
+view : Model -> H.Html Msg
 view model =
     case model of
-        Loading _ ->
+        Loading ->
             H.text "Loading..."
 
         InProgress inProgressModel ->
@@ -111,8 +135,8 @@ view model =
             H.text error
 
 
-viewWordle : InProgressModel -> H.Html msg
-viewWordle { dictionary, wordle, current } =
+viewWordle : InProgressModel -> H.Html Msg
+viewWordle { wordle, current } =
     let
         wordLength =
             Dictionary.toWordLength dictionary
@@ -134,7 +158,7 @@ viewWordle { dictionary, wordle, current } =
             , H.div [ HA.class "wordle__keyboard" ]
                 [ View.Keyboard.view
                     { history = history
-                    , maybeOnKeyPress = Nothing
+                    , maybeOnKeyPress = Just KeyPressed
                     }
                 ]
             ]
