@@ -4,6 +4,7 @@ module Data.Dictionary exposing
     , contains
     , containsAnswer
     , new
+    , toWordLength
     )
 
 import Lib.Random.Set as Set
@@ -13,10 +14,12 @@ import Set exposing (Set)
 
 type Dictionary
     = Dictionary
+        { wordLength : Int
+
         --
         -- N.B. The set of answers and the set of nonAnswers are disjoint.
         --
-        { answers : Set String
+        , answers : Set String
         , nonAnswers : Set String
         }
 
@@ -39,12 +42,14 @@ new { wordLength, answers, nonAnswers } =
                         (processWords wordLength nonAnswers)
                         answersSet
             in
-            { answers = answersSet
+            { wordLength = wordLength
+            , answers = answersSet
             , nonAnswers = nonAnswersSet
             }
 
         else
-            { answers = Set.empty
+            { wordLength = 0
+            , answers = Set.empty
             , nonAnswers = Set.empty
             }
 
@@ -79,3 +84,8 @@ containsAnswer s (Dictionary { answers }) =
 contains : String -> Dictionary -> Bool
 contains s (Dictionary { answers, nonAnswers }) =
     Set.member s answers || Set.member s nonAnswers
+
+
+toWordLength : Dictionary -> Int
+toWordLength (Dictionary { wordLength }) =
+    wordLength
