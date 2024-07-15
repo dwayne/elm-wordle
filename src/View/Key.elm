@@ -54,7 +54,8 @@ view { key, maybeOnClick } =
                     )
     in
     H.button
-        [ HA.class "key"
+        [ HA.type_ "button"
+        , HA.class "key"
         , HA.class modifierClass
         , case maybeOnClick of
             Just onClick ->
