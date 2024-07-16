@@ -1,6 +1,9 @@
 module Data.Wordle exposing
-    ( Config
+    ( Action(..)
+    , Config
     , Details
+    , Outcome(..)
+    , Reason(..)
     , State
     , Status(..)
     , Wordle
@@ -8,11 +11,13 @@ module Data.Wordle exposing
     , inspect
     , maxGuessesAllowed
     , minGuessesAllowed
+    , perform
     , start
     )
 
 import Data.Answer as Answer exposing (Answer)
 import Data.Bag as Bag exposing (Bag)
+import Data.Dictionary as Dictionary exposing (Dictionary)
 import Data.Guess as Guess exposing (Guess)
 import Data.History as History exposing (History)
 import Data.Letter as Letter exposing (Letter)
@@ -41,7 +46,8 @@ maxGuessesAllowed =
 
 
 type alias State =
-    { pastGuesses : List Guess
+    { currentInput : List Char
+    , pastGuesses : List Guess
     , history : History
     , status : Status
     }
@@ -63,12 +69,101 @@ start numGuessesAllowed answer =
             }
 
         state =
-            { pastGuesses = []
+            { currentInput = []
+            , pastGuesses = []
             , history = History.empty
             , status = InProgress
             }
     in
     Wordle config state
+
+
+type Action
+    = Input Char
+    | Enter
+    | Delete
+
+
+type Outcome
+    = AppendChar Char
+    | RemoveChar Char
+    | GuessAllowed Word
+    | NoChange Reason
+
+
+type Reason
+    = Empty
+    | GameOver
+    | MaxLength Int
+    | NotAWord String
+    | NotEnoughLetters
+        { actual : Int
+        , expected : Int
+        }
+
+
+perform : Dictionary -> Action -> Wordle -> ( Wordle, Outcome )
+perform dictionary action (Wordle config state) =
+    if state.status == InProgress then
+        let
+            wordLength =
+                Dictionary.toWordLength dictionary
+
+            currentInput =
+                state.currentInput
+
+            currentInputLength =
+                List.length currentInput
+        in
+        case action of
+            Input ch ->
+                if currentInputLength == wordLength then
+                    ( Wordle config state, NoChange <| MaxLength wordLength )
+
+                else
+                    ( Wordle config { state | currentInput = ch :: currentInput }
+                    , AppendChar ch
+                    )
+
+            Enter ->
+                if currentInputLength == wordLength then
+                    let
+                        currentInputAsString =
+                            String.fromList currentInput
+
+                        maybeWord =
+                            Word.fromString dictionary currentInputAsString
+                    in
+                    case maybeWord of
+                        Just word ->
+                            ( Wordle config { state | currentInput = [] }
+                            , GuessAllowed word
+                            )
+
+                        Nothing ->
+                            ( Wordle config state, NoChange <| NotAWord currentInputAsString )
+
+                else
+                    ( Wordle config state
+                    , NoChange <|
+                        NotEnoughLetters
+                            { actual = currentInputLength
+                            , expected = wordLength
+                            }
+                    )
+
+            Delete ->
+                case currentInput of
+                    [] ->
+                        ( Wordle config state, NoChange Empty )
+
+                    ch :: restCurrentInput ->
+                        ( Wordle config { state | currentInput = restCurrentInput }
+                        , RemoveChar ch
+                        )
+
+    else
+        ( Wordle config state, NoChange GameOver )
 
 
 guess : Word -> Wordle -> Wordle
@@ -104,6 +199,7 @@ guess word (Wordle config state) =
 type alias Details =
     { numGuessesAllowed : Int
     , answer : Answer
+    , currentInput : List Char
     , pastGuesses : List Guess
     , history : History
     , status : Status
@@ -111,9 +207,10 @@ type alias Details =
 
 
 inspect : Wordle -> Details
-inspect (Wordle { numGuessesAllowed, answer } { pastGuesses, history, status }) =
+inspect (Wordle { numGuessesAllowed, answer } { currentInput, pastGuesses, history, status }) =
     { numGuessesAllowed = numGuessesAllowed
     , answer = answer
+    , currentInput = List.reverse currentInput
     , pastGuesses = List.reverse pastGuesses
     , history = history
     , status = status
