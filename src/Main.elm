@@ -27,31 +27,32 @@ main =
 
 
 
+-- CONFIG
+
+
+numGuessesAllowed : Int
+numGuessesAllowed =
+    6
+
+
+dictionary : Dictionary
+dictionary =
+    Classic.dictionary
+
+
+wordLength : Int
+wordLength =
+    Dictionary.toWordLength dictionary
+
+
+
 -- MODEL
 
 
 type Model
     = Loading
-    | InProgress InProgressModel
+    | Loaded Wordle
     | Error String
-
-
-type alias InProgressModel =
-    { wordle : Wordle
-    , current : List Char
-    }
-
-
---
--- N.B. I removed the dictionary from within the model
--- since it is really large and it seems to be causing
--- problems with the debugger when messages are generated
--- and/or the model is changed. I was getting a
--- TOO MUCH RECURSION error from the JavaScript.
---
-dictionary : Dictionary
-dictionary =
-    Classic.dictionary
 
 
 init : () -> ( Model, Cmd Msg )
@@ -78,13 +79,7 @@ update msg model =
                 GeneratedMaybeAnswer maybeAnswer ->
                     case maybeAnswer of
                         Just answer ->
-                            ( InProgress
-                                --
-                                -- TODO: Remove hardcoded numGuessesAllowed.
-                                --
-                                { wordle = Wordle.start 6 answer
-                                , current = []
-                                }
+                            ( Loaded <| Wordle.start numGuessesAllowed answer
                             , Cmd.none
                             )
 
@@ -96,26 +91,33 @@ update msg model =
                 KeyPressed _ ->
                     ( model, Cmd.none )
 
-        InProgress inProgressModel ->
+        Loaded wordle ->
             case msg of
                 GeneratedMaybeAnswer _ ->
                     ( model, Cmd.none )
 
                 KeyPressed key ->
-                    case key of
-                        View.Keyboard.Letter ch ->
-                            ( InProgress { inProgressModel | current = inProgressModel.current ++ [ ch ] }
-                            , Cmd.none
-                            )
-
-                        View.Keyboard.Enter ->
-                            ( model, Cmd.none )
-
-                        View.Keyboard.Delete ->
-                            ( model, Cmd.none )
+                    let
+                        ( newWordle, _ ) =
+                            Wordle.perform dictionary (keyToAction key) wordle
+                    in
+                    ( Loaded newWordle, Cmd.none )
 
         Error _ ->
             ( model, Cmd.none )
+
+
+keyToAction : View.Keyboard.Key -> Wordle.Action
+keyToAction key =
+    case key of
+        View.Keyboard.Letter ch ->
+            Wordle.Input ch
+
+        View.Keyboard.Enter ->
+            Wordle.Enter
+
+        View.Keyboard.Delete ->
+            Wordle.Delete
 
 
 
@@ -128,20 +130,17 @@ view model =
         Loading ->
             H.text "Loading..."
 
-        InProgress inProgressModel ->
-            viewWordle inProgressModel
+        Loaded wordle ->
+            viewWordle wordle
 
         Error error ->
             H.text error
 
 
-viewWordle : InProgressModel -> H.Html Msg
-viewWordle { wordle, current } =
+viewWordle : Wordle -> H.Html Msg
+viewWordle wordle =
     let
-        wordLength =
-            Dictionary.toWordLength dictionary
-
-        { numGuessesAllowed, pastGuesses, history } =
+        { currentInput, pastGuesses, history } =
             Wordle.inspect wordle
     in
     H.div [ HA.class "wordle" ]
@@ -149,10 +148,8 @@ viewWordle { wordle, current } =
         , H.main_ []
             [ H.div [ HA.class "wordle__guesses" ]
                 [ viewGuesses
-                    { wordLength = wordLength
-                    , numGuessesAllowed = numGuessesAllowed
-                    , pastGuesses = pastGuesses
-                    , current = current
+                    { pastGuesses = pastGuesses
+                    , currentInput = currentInput
                     }
                 ]
             , H.div [ HA.class "wordle__keyboard" ]
@@ -166,15 +163,13 @@ viewWordle { wordle, current } =
 
 
 type alias ViewGuessesOptions =
-    { wordLength : Int
-    , numGuessesAllowed : Int
-    , pastGuesses : List Guess
-    , current : List Char
+    { pastGuesses : List Guess
+    , currentInput : List Char
     }
 
 
 viewGuesses : ViewGuessesOptions -> H.Html msg
-viewGuesses { wordLength, numGuessesAllowed, pastGuesses, current } =
+viewGuesses { pastGuesses, currentInput } =
     let
         numEmptyRows =
             numGuessesAllowed - List.length pastGuesses - 1
@@ -183,11 +178,11 @@ viewGuesses { wordLength, numGuessesAllowed, pastGuesses, current } =
         List.concat
             [ List.map viewPastGuess pastGuesses
             , if numEmptyRows >= 0 then
-                [ viewCurrentGuess wordLength current ]
+                [ viewCurrentGuess currentInput ]
 
               else
                 []
-            , List.repeat numEmptyRows (viewEmptyGuess wordLength)
+            , List.repeat numEmptyRows viewEmptyGuess
             ]
 
 
@@ -208,8 +203,8 @@ viewPastGuess =
         >> H.div [ HA.class "guess" ]
 
 
-viewCurrentGuess : Int -> List Char -> H.Html msg
-viewCurrentGuess wordLength current =
+viewCurrentGuess : List Char -> H.Html msg
+viewCurrentGuess current =
     let
         numEmptyTiles =
             wordLength - List.length current
@@ -239,7 +234,7 @@ viewEmptyTile =
         ]
 
 
-viewEmptyGuess : Int -> H.Html msg
-viewEmptyGuess wordLength =
+viewEmptyGuess : H.Html msg
+viewEmptyGuess =
     H.div [ HA.class "guess" ] <|
         List.repeat wordLength (View.Letter.view View.Letter.Empty)
