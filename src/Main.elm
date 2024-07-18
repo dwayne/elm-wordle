@@ -179,40 +179,17 @@ viewGuesses { pastGuesses, currentInput } =
         List.concat
             [ List.map View.Guess.viewPast pastGuesses
             , if numEmptyRows >= 0 then
-                [ viewCurrentGuess currentInput ]
+                [ View.Guess.viewCurrent
+                    { wordLength = wordLength
+                    , state =
+                        View.Guess.InProgress
+                            { input = currentInput
+                            , maybeOnShakeEnd = Nothing
+                            }
+                    }
+                ]
 
               else
                 []
             , List.repeat numEmptyRows (View.Guess.viewEmpty wordLength)
             ]
-
-
-viewCurrentGuess : List Char -> H.Html msg
-viewCurrentGuess current =
-    let
-        numEmptyTiles =
-            wordLength - List.length current
-    in
-    H.div [ HA.class "guess" ] <|
-        List.concat
-            [ List.map viewTile current
-            , List.repeat numEmptyTiles viewEmptyTile
-            ]
-
-
-viewTile : Char -> H.Html msg
-viewTile ch =
-    H.div [ HA.class "tile tile--animation--appear" ]
-        [ H.div [ HA.class "tile__front" ]
-            [ View.Letter.view <| View.Letter.NonEmpty ch ]
-        , H.div [ HA.class "tile__back" ] []
-        ]
-
-
-viewEmptyTile : H.Html msg
-viewEmptyTile =
-    H.div [ HA.class "tile" ]
-        [ H.div [ HA.class "tile__front" ]
-            [ View.Letter.view View.Letter.Empty ]
-        , H.div [ HA.class "tile__back" ] []
-        ]

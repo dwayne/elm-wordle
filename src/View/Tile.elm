@@ -17,8 +17,7 @@ type Tile msg
 
 type Animation msg
     = None
-    | Flip
-    | FlipAndNotifyAtEnd msg
+    | Flip msg
 
 
 view : Tile msg -> H.Html msg
@@ -97,12 +96,7 @@ toAnimationDetails animation =
             , onAnimationEnd = HA.empty
             }
 
-        Flip ->
-            { modifierClass = "tile--animation--flip"
-            , onAnimationEnd = HA.empty
-            }
-
-        FlipAndNotifyAtEnd onAnimationEnd ->
+        Flip onAnimationEnd ->
             { modifierClass = "tile--animation--flip"
             , onAnimationEnd = HE.onAnimationEnd onAnimationEnd
             }
