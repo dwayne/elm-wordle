@@ -11,6 +11,7 @@ import Data.Wordle as Wordle exposing (Wordle)
 import Html as H
 import Html.Attributes as HA
 import Random
+import View.Guess
 import View.Keyboard
 import View.Letter
 import View.Title
@@ -176,31 +177,14 @@ viewGuesses { pastGuesses, currentInput } =
     in
     H.div [ HA.class "guesses" ] <|
         List.concat
-            [ List.map viewPastGuess pastGuesses
+            [ List.map View.Guess.viewPast pastGuesses
             , if numEmptyRows >= 0 then
                 [ viewCurrentGuess currentInput ]
 
               else
                 []
-            , List.repeat numEmptyRows viewEmptyGuess
+            , List.repeat numEmptyRows (View.Guess.viewEmpty wordLength)
             ]
-
-
-viewPastGuess : Guess -> H.Html msg
-viewPastGuess =
-    List.map
-        (\letter ->
-            case letter of
-                Letter.Correct ch ->
-                    View.Letter.view <| View.Letter.Correct ch
-
-                Letter.Possible ch ->
-                    View.Letter.view <| View.Letter.Possible ch
-
-                Letter.Impossible ch ->
-                    View.Letter.view <| View.Letter.Impossible ch
-        )
-        >> H.div [ HA.class "guess" ]
 
 
 viewCurrentGuess : List Char -> H.Html msg
@@ -232,9 +216,3 @@ viewEmptyTile =
             [ View.Letter.view View.Letter.Empty ]
         , H.div [ HA.class "tile__back" ] []
         ]
-
-
-viewEmptyGuess : H.Html msg
-viewEmptyGuess =
-    H.div [ HA.class "guess" ] <|
-        List.repeat wordLength (View.Letter.view View.Letter.Empty)
