@@ -15,7 +15,7 @@ type alias ViewOptions msg =
 
 
 type Key
-    = Letter (Maybe History.Past) Char
+    = Character (Maybe History.Past) Char
     | Enter
     | Delete
 
@@ -25,7 +25,7 @@ view { key, maybeOnClick } =
     let
         ( modifierClass, content ) =
             case key of
-                Letter maybePast ch ->
+                Character maybePast ch ->
                     ( case maybePast of
                         Just past ->
                             case past of

@@ -110,7 +110,7 @@ update msg model =
 keyToAction : View.Keyboard.Key -> Wordle.Action
 keyToAction key =
     case key of
-        View.Keyboard.Letter ch ->
+        View.Keyboard.Character ch ->
             Wordle.Input ch
 
         View.Keyboard.Enter ->

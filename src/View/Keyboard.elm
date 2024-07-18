@@ -17,10 +17,10 @@ type
     --
     -- I want to indicate which key was pressed but I don't
     -- want the "past" information that comes along with the
-    -- View.Key.Letter data constructor. Hence the reason
+    -- View.Key.Character data constructor. Hence the reason
     -- for a new Key type that excludes that data.
     --
-    = Letter Char
+    = Character Char
     | Enter
     | Delete
 
@@ -58,8 +58,8 @@ viewRow { history, maybeOnKeyPress } =
                                 History.getPast ch history
                         in
                         View.Key.view
-                            { key = View.Key.Letter past ch
-                            , maybeOnClick = Maybe.map ((|>) (Letter ch)) maybeOnKeyPress
+                            { key = View.Key.Character past ch
+                            , maybeOnClick = Maybe.map ((|>) (Character ch)) maybeOnKeyPress
                             }
             )
         >> H.div [ HA.class "keyboard__row" ]
