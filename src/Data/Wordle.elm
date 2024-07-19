@@ -129,7 +129,9 @@ perform dictionary action (Wordle config state) =
                 if currentInputLength == wordLength then
                     let
                         currentInputAsString =
-                            String.fromList currentInput
+                            currentInput
+                                |> List.reverse
+                                |> String.fromList
 
                         maybeWord =
                             Word.fromString dictionary currentInputAsString

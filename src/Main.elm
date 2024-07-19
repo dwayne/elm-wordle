@@ -10,10 +10,12 @@ import Data.Word as Word
 import Data.Wordle as Wordle exposing (Wordle)
 import Html as H
 import Html.Attributes as HA
+import Lib.Timer as Timer
 import Random
 import View.Guess
 import View.Keyboard
 import View.Letter
+import View.Message
 import View.Title
 
 
@@ -52,8 +54,16 @@ wordLength =
 
 type Model
     = Loading
-    | Loaded Wordle
-    | Error String
+    | Loaded State
+    | NoAnswer
+
+
+type alias State =
+    { wordle : Wordle
+    , isOpen : Bool
+    , message : String
+    , shake : Bool
+    }
 
 
 init : () -> ( Model, Cmd Msg )
@@ -70,9 +80,11 @@ init _ =
 type Msg
     = GeneratedMaybeAnswer (Maybe Answer)
     | KeyPressed View.Keyboard.Key
+    | ShakeEnded
+    | MessageClosed
 
 
-update : Msg -> Model -> ( Model, Cmd msg )
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case model of
         Loading ->
@@ -80,31 +92,91 @@ update msg model =
                 GeneratedMaybeAnswer maybeAnswer ->
                     case maybeAnswer of
                         Just answer ->
-                            ( Loaded <| Wordle.start numGuessesAllowed answer
+                            ( Loaded
+                                { wordle = Wordle.start numGuessesAllowed answer
+                                , isOpen = False
+                                , message = ""
+                                , shake = False
+                                }
                             , Cmd.none
                             )
 
                         Nothing ->
-                            ( Error "Unable to generate an answer."
+                            ( NoAnswer
                             , Cmd.none
                             )
 
-                KeyPressed _ ->
+                _ ->
                     ( model, Cmd.none )
 
-        Loaded wordle ->
+        Loaded state ->
             case msg of
-                GeneratedMaybeAnswer _ ->
-                    ( model, Cmd.none )
-
                 KeyPressed key ->
                     let
-                        ( newWordle, _ ) =
-                            Wordle.perform dictionary (keyToAction key) wordle
+                        ( newWordle, outcome ) =
+                            Wordle.perform dictionary (keyToAction key) state.wordle
                     in
-                    ( Loaded newWordle, Cmd.none )
+                    case outcome of
+                        Wordle.AppendChar _ ->
+                            ( Loaded { state | wordle = newWordle }
+                            , Cmd.none
+                            )
 
-        Error _ ->
+                        Wordle.RemoveChar _ ->
+                            ( Loaded { state | wordle = newWordle }
+                            , Cmd.none
+                            )
+
+                        Wordle.GuessAllowed _ ->
+                            ( Loaded { state | wordle = newWordle }
+                            , Cmd.none
+                            )
+
+                        Wordle.NoChange reason ->
+                            case reason of
+                                Wordle.Empty ->
+                                    ( model, Cmd.none )
+
+                                Wordle.GameOver ->
+                                    ( model, Cmd.none )
+
+                                Wordle.MaxLength _ ->
+                                    ( model, Cmd.none )
+
+                                Wordle.NotAWord _ ->
+                                    ( Loaded
+                                        { state
+                                            | isOpen = True
+                                            , message = "Not in word list"
+                                            , shake = True
+                                        }
+                                    , Cmd.none
+                                    )
+
+                                Wordle.NotEnoughLetters _ ->
+                                    ( Loaded
+                                        { state
+                                            | isOpen = True
+                                            , message = "Not enough letters"
+                                            , shake = True
+                                        }
+                                    , Cmd.none
+                                    )
+
+                ShakeEnded ->
+                    ( Loaded { state | shake = False }
+                    , Timer.setTimeout 750 MessageClosed
+                    )
+
+                MessageClosed ->
+                    ( Loaded { state | isOpen = False }
+                    , Cmd.none
+                    )
+
+                _ ->
+                    ( model, Cmd.none )
+
+        NoAnswer ->
             ( model, Cmd.none )
 
 
@@ -131,46 +203,64 @@ view model =
         Loading ->
             H.text "Loading..."
 
-        Loaded wordle ->
-            viewWordle wordle
+        Loaded state ->
+            viewWordle state
 
-        Error error ->
-            H.text error
+        NoAnswer ->
+            H.text "Unable to generate an answer."
 
 
-viewWordle : Wordle -> H.Html Msg
-viewWordle wordle =
+viewWordle : State -> H.Html Msg
+viewWordle { wordle, isOpen, message, shake } =
     let
         { currentInput, pastGuesses, history } =
             Wordle.inspect wordle
     in
     H.div [ HA.class "wordle" ]
-        [ H.header [ HA.class "wordle__header" ] [ View.Title.view ]
+        [ H.div
+            [ HA.class "wordle__message"
+            , HA.classList [ ( "wordle__message--open", isOpen ) ]
+            ]
+            [ View.Message.view message
+            ]
+        , H.header [ HA.class "wordle__header" ] [ View.Title.view ]
         , H.main_ []
             [ H.div [ HA.class "wordle__guesses" ]
                 [ viewGuesses
-                    { pastGuesses = pastGuesses
+                    { maybeOnShakeEnd =
+                        if shake then
+                            Just ShakeEnded
+
+                        else
+                            Nothing
                     , currentInput = currentInput
+                    , pastGuesses = pastGuesses
                     }
                 ]
             , H.div [ HA.class "wordle__keyboard" ]
                 [ View.Keyboard.view
                     { history = history
-                    , maybeOnKeyPress = Just KeyPressed
+                    , maybeOnKeyPress =
+                        if isOpen then
+                            Nothing
+
+                        else
+                            Just KeyPressed
                     }
                 ]
             ]
         ]
 
 
-type alias ViewGuessesOptions =
-    { pastGuesses : List Guess
+type alias ViewGuessesOptions msg =
+    { maybeOnShakeEnd : Maybe msg
+    , pastGuesses : List Guess
     , currentInput : List Char
     }
 
 
-viewGuesses : ViewGuessesOptions -> H.Html msg
-viewGuesses { pastGuesses, currentInput } =
+viewGuesses : ViewGuessesOptions msg -> H.Html msg
+viewGuesses { maybeOnShakeEnd, pastGuesses, currentInput } =
     let
         numEmptyRows =
             numGuessesAllowed - List.length pastGuesses - 1
@@ -184,7 +274,7 @@ viewGuesses { pastGuesses, currentInput } =
                     , state =
                         View.Guess.InProgress
                             { input = currentInput
-                            , maybeOnShakeEnd = Nothing
+                            , maybeOnShakeEnd = maybeOnShakeEnd
                             }
                     }
                 ]

@@ -6,4 +6,8 @@ import Html.Attributes as HA
 
 view : String -> H.Html msg
 view message =
-    H.div [ HA.class "message" ] [ H.text message ]
+    if String.isEmpty message then
+        H.text ""
+
+    else
+        H.div [ HA.class "message" ] [ H.text message ]
