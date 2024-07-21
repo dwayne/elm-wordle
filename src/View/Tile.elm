@@ -16,8 +16,8 @@ type Tile msg
 
 
 type Animation msg
-    = None
-    | Flip msg
+    = Flip
+    | FlipEnd msg
 
 
 view : Tile msg -> H.Html msg
@@ -91,12 +91,12 @@ type alias AnimationDetails msg =
 toAnimationDetails : Animation msg -> AnimationDetails msg
 toAnimationDetails animation =
     case animation of
-        None ->
-            { modifierClass = ""
+        Flip ->
+            { modifierClass = "tile--animation--flip"
             , onAnimationEnd = HA.empty
             }
 
-        Flip onAnimationEnd ->
+        FlipEnd onAnimationEnd ->
             { modifierClass = "tile--animation--flip"
             , onAnimationEnd = HE.onAnimationEnd onAnimationEnd
             }

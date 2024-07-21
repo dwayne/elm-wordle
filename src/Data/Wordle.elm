@@ -213,7 +213,7 @@ inspect (Wordle { numGuessesAllowed, answer } { currentInput, pastGuesses, histo
     { numGuessesAllowed = numGuessesAllowed
     , answer = answer
     , currentInput = List.reverse currentInput
-    , pastGuesses = List.reverse pastGuesses
+    , pastGuesses = pastGuesses
     , history = history
     , status = status
     }

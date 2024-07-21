@@ -109,13 +109,13 @@ lettersToTiles revTiles onRevealEnd letters =
 
         [ letter ] ->
             lettersToTiles
-                (letterToTile letter (View.Tile.Flip onRevealEnd) :: revTiles)
+                (letterToTile letter (View.Tile.FlipEnd onRevealEnd) :: revTiles)
                 onRevealEnd
                 []
 
         letter :: restLetters ->
             lettersToTiles
-                (letterToTile letter View.Tile.None :: revTiles)
+                (letterToTile letter View.Tile.Flip :: revTiles)
                 onRevealEnd
                 restLetters
 

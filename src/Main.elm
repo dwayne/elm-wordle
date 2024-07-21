@@ -5,6 +5,7 @@ import Data.Answer as Answer exposing (Answer)
 import Data.Dictionary as Dictionary exposing (Dictionary)
 import Data.Dictionary.Classic as Classic
 import Data.Guess exposing (Guess)
+import Data.History exposing (History)
 import Data.Letter as Letter
 import Data.Word as Word
 import Data.Wordle as Wordle exposing (Wordle)
@@ -63,6 +64,7 @@ type alias State =
     , isOpen : Bool
     , message : String
     , shake : Bool
+    , maybePrevHistory : Maybe History
     }
 
 
@@ -81,6 +83,7 @@ type Msg
     = GeneratedMaybeAnswer (Maybe Answer)
     | KeyPressed View.Keyboard.Key
     | ShakeEnded
+    | RevealEnded
     | MessageClosed
 
 
@@ -97,6 +100,7 @@ update msg model =
                                 , isOpen = False
                                 , message = ""
                                 , shake = False
+                                , maybePrevHistory = Nothing
                                 }
                             , Cmd.none
                             )
@@ -113,22 +117,33 @@ update msg model =
             case msg of
                 KeyPressed key ->
                     let
-                        ( newWordle, outcome ) =
+                        ( wordle1, outcome ) =
                             Wordle.perform dictionary (keyToAction key) state.wordle
                     in
                     case outcome of
                         Wordle.AppendChar _ ->
-                            ( Loaded { state | wordle = newWordle }
+                            ( Loaded { state | wordle = wordle1 }
                             , Cmd.none
                             )
 
                         Wordle.RemoveChar _ ->
-                            ( Loaded { state | wordle = newWordle }
+                            ( Loaded { state | wordle = wordle1 }
                             , Cmd.none
                             )
 
-                        Wordle.GuessAllowed _ ->
-                            ( Loaded { state | wordle = newWordle }
+                        Wordle.GuessAllowed word ->
+                            let
+                                wordle2 =
+                                    Wordle.guess word wordle1
+
+                                { history } =
+                                    Wordle.inspect wordle1
+                            in
+                            ( Loaded
+                                { state
+                                    | wordle = wordle2
+                                    , maybePrevHistory = Just history
+                                }
                             , Cmd.none
                             )
 
@@ -166,6 +181,11 @@ update msg model =
                 ShakeEnded ->
                     ( Loaded { state | shake = False }
                     , Timer.setTimeout 750 MessageClosed
+                    )
+
+                RevealEnded ->
+                    ( Loaded { state | maybePrevHistory = Nothing }
+                    , Cmd.none
                     )
 
                 MessageClosed ->
@@ -211,10 +231,18 @@ view model =
 
 
 viewWordle : State -> H.Html Msg
-viewWordle { wordle, isOpen, message, shake } =
+viewWordle { wordle, isOpen, message, shake, maybePrevHistory } =
     let
-        { currentInput, pastGuesses, history } =
+        details =
             Wordle.inspect wordle
+
+        ( reveal, history ) =
+            case maybePrevHistory of
+                Just prevHistory ->
+                    ( True, prevHistory )
+
+                Nothing ->
+                    ( False, details.history )
     in
     H.div [ HA.class "wordle" ]
         [ H.div
@@ -227,21 +255,17 @@ viewWordle { wordle, isOpen, message, shake } =
         , H.main_ []
             [ H.div [ HA.class "wordle__guesses" ]
                 [ viewGuesses
-                    { maybeOnShakeEnd =
-                        if shake then
-                            Just ShakeEnded
-
-                        else
-                            Nothing
-                    , currentInput = currentInput
-                    , pastGuesses = pastGuesses
+                    { currentInput = details.currentInput
+                    , pastGuesses = details.pastGuesses
+                    , shake = shake
+                    , reveal = reveal
                     }
                 ]
             , H.div [ HA.class "wordle__keyboard" ]
                 [ View.Keyboard.view
                     { history = history
                     , maybeOnKeyPress =
-                        if isOpen then
+                        if isOpen || reveal then
                             Nothing
 
                         else
@@ -252,30 +276,56 @@ viewWordle { wordle, isOpen, message, shake } =
         ]
 
 
-type alias ViewGuessesOptions msg =
-    { maybeOnShakeEnd : Maybe msg
-    , pastGuesses : List Guess
+type alias ViewGuessesOptions =
+    { pastGuesses : List Guess
     , currentInput : List Char
+    , shake : Bool
+    , reveal : Bool
     }
 
 
-viewGuesses : ViewGuessesOptions msg -> H.Html msg
-viewGuesses { maybeOnShakeEnd, pastGuesses, currentInput } =
+viewGuesses : ViewGuessesOptions -> H.Html Msg
+viewGuesses { pastGuesses, currentInput, shake, reveal } =
     let
+        ( maybeGuess, guesses ) =
+            if reveal then
+                case pastGuesses of
+                    [] ->
+                        ( Nothing, [] )
+
+                    guess :: restPastGuesses ->
+                        ( Just guess, List.reverse restPastGuesses )
+
+            else
+                ( Nothing, List.reverse pastGuesses )
+
         numEmptyRows =
-            numGuessesAllowed - List.length pastGuesses - 1
+            numGuessesAllowed - List.length guesses - 1
     in
     H.div [ HA.class "guesses" ] <|
         List.concat
-            [ List.map View.Guess.viewPast pastGuesses
+            [ List.map View.Guess.viewPast guesses
             , if numEmptyRows >= 0 then
                 [ View.Guess.viewCurrent
                     { wordLength = wordLength
                     , state =
-                        View.Guess.InProgress
-                            { input = currentInput
-                            , maybeOnShakeEnd = maybeOnShakeEnd
-                            }
+                        case maybeGuess of
+                            Just guess ->
+                                View.Guess.Completed
+                                    { guess = guess
+                                    , onRevealEnd = RevealEnded
+                                    }
+
+                            Nothing ->
+                                View.Guess.InProgress
+                                    { input = currentInput
+                                    , maybeOnShakeEnd =
+                                        if shake then
+                                            Just ShakeEnded
+
+                                        else
+                                            Nothing
+                                    }
                     }
                 ]
 
