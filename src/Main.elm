@@ -14,6 +14,7 @@ import Html.Attributes as HA
 import Lib.Timer as Timer
 import Random
 import View.Guess
+import View.Guesses
 import View.Keyboard
 import View.Letter
 import View.Message
@@ -236,13 +237,22 @@ viewWordle { wordle, isOpen, message, shake, maybePrevHistory } =
         details =
             Wordle.inspect wordle
 
-        ( reveal, history ) =
+        ( maybeAction, history ) =
             case maybePrevHistory of
                 Just prevHistory ->
-                    ( True, prevHistory )
+                    ( Just <| View.Guesses.Reveal RevealEnded, prevHistory )
 
                 Nothing ->
-                    ( False, details.history )
+                    ( if shake then
+                        Just <| View.Guesses.Shake ShakeEnded
+
+                      else
+                        Nothing
+                    , details.history
+                    )
+
+        isDisabled =
+            isOpen || maybeAction /= Nothing
     in
     H.div [ HA.class "wordle" ]
         [ H.div
@@ -254,18 +264,19 @@ viewWordle { wordle, isOpen, message, shake, maybePrevHistory } =
         , H.header [ HA.class "wordle__header" ] [ View.Title.view ]
         , H.main_ []
             [ H.div [ HA.class "wordle__guesses" ]
-                [ viewGuesses
-                    { currentInput = details.currentInput
+                [ View.Guesses.view
+                    { numGuessesAllowed = numGuessesAllowed
+                    , wordLength = wordLength
                     , pastGuesses = details.pastGuesses
-                    , shake = shake
-                    , reveal = reveal
+                    , currentInput = details.currentInput
+                    , maybeAction = maybeAction
                     }
                 ]
             , H.div [ HA.class "wordle__keyboard" ]
                 [ View.Keyboard.view
                     { history = history
                     , maybeOnKeyPress =
-                        if isOpen || reveal then
+                        if isDisabled then
                             Nothing
 
                         else
@@ -274,62 +285,3 @@ viewWordle { wordle, isOpen, message, shake, maybePrevHistory } =
                 ]
             ]
         ]
-
-
-type alias ViewGuessesOptions =
-    { pastGuesses : List Guess
-    , currentInput : List Char
-    , shake : Bool
-    , reveal : Bool
-    }
-
-
-viewGuesses : ViewGuessesOptions -> H.Html Msg
-viewGuesses { pastGuesses, currentInput, shake, reveal } =
-    let
-        ( maybeGuess, guesses ) =
-            if reveal then
-                case pastGuesses of
-                    [] ->
-                        ( Nothing, [] )
-
-                    guess :: restPastGuesses ->
-                        ( Just guess, List.reverse restPastGuesses )
-
-            else
-                ( Nothing, List.reverse pastGuesses )
-
-        numEmptyRows =
-            numGuessesAllowed - List.length guesses - 1
-    in
-    H.div [ HA.class "guesses" ] <|
-        List.concat
-            [ List.map View.Guess.viewPast guesses
-            , if numEmptyRows >= 0 then
-                [ View.Guess.viewCurrent
-                    { wordLength = wordLength
-                    , state =
-                        case maybeGuess of
-                            Just guess ->
-                                View.Guess.Completed
-                                    { guess = guess
-                                    , onRevealEnd = RevealEnded
-                                    }
-
-                            Nothing ->
-                                View.Guess.InProgress
-                                    { input = currentInput
-                                    , maybeOnShakeEnd =
-                                        if shake then
-                                            Just ShakeEnded
-
-                                        else
-                                            Nothing
-                                    }
-                    }
-                ]
-
-              else
-                []
-            , List.repeat numEmptyRows (View.Guess.viewEmpty wordLength)
-            ]
