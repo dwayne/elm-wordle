@@ -185,7 +185,23 @@ update msg model =
                     )
 
                 RevealEnded ->
-                    ( Loaded { state | maybePrevHistory = Nothing }
+                    let
+                        { answer, pastGuesses, status } =
+                            Wordle.inspect state.wordle
+                    in
+                    ( case status of
+                        Wordle.InProgress ->
+                            Loaded { state | maybePrevHistory = Nothing }
+
+                        Wordle.Won ->
+                            let
+                                numGuesses =
+                                    List.length pastGuesses
+                            in
+                            Loaded { state | isOpen = True, message = toWonMessage numGuesses }
+
+                        Wordle.Lost ->
+                            Loaded { state | isOpen = True, message = toLostMessage answer }
                     , Cmd.none
                     )
 
@@ -285,3 +301,29 @@ viewWordle { wordle, isOpen, message, shake, maybePrevHistory } =
                 ]
             ]
         ]
+
+
+toWonMessage : Int -> String
+toWonMessage n =
+    if n == numGuessesAllowed then
+        "Phew"
+
+    else if n <= 1 then
+        "Genius"
+
+    else if n == 2 then
+        "Magnificent"
+
+    else if n == 3 then
+        "Impressive"
+
+    else if n == 4 then
+        "Splendid"
+
+    else
+        "Great"
+
+
+toLostMessage : Answer -> String
+toLostMessage =
+    String.toUpper << Answer.toString
