@@ -32,7 +32,7 @@ new :
     -> Dictionary
 new { wordLength, answers, nonAnswers } =
     Dictionary <|
-        if wordLength >= 1 && wordLength <= 10 then
+        if wordLength >= minWordLength && wordLength <= maxWordLength then
             let
                 answersSet =
                     processWords wordLength answers
@@ -52,6 +52,16 @@ new { wordLength, answers, nonAnswers } =
             , answers = Set.empty
             , nonAnswers = Set.empty
             }
+
+
+minWordLength : Int
+minWordLength =
+    1
+
+
+maxWordLength : Int
+maxWordLength =
+    10
 
 
 processWords : Int -> List String -> Set String

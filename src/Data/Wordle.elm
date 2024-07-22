@@ -9,8 +9,6 @@ module Data.Wordle exposing
     , Wordle
     , guess
     , inspect
-    , maxGuessesAllowed
-    , minGuessesAllowed
     , perform
     , start
     )
@@ -33,16 +31,6 @@ type alias Config =
     , answer : Answer
     , chars : Bag Char
     }
-
-
-minGuessesAllowed : Int
-minGuessesAllowed =
-    1
-
-
-maxGuessesAllowed : Int
-maxGuessesAllowed =
-    10
 
 
 type alias State =
@@ -76,6 +64,16 @@ start numGuessesAllowed answer =
             }
     in
     Wordle config state
+
+
+minGuessesAllowed : Int
+minGuessesAllowed =
+    1
+
+
+maxGuessesAllowed : Int
+maxGuessesAllowed =
+    10
 
 
 type Action
