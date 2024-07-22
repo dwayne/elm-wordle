@@ -55,7 +55,7 @@ type alias State =
 
 type Status
     = InProgress
-    | Won
+    | Won Int
     | Lost
 
 
@@ -179,14 +179,17 @@ guess word (Wordle config state) =
                 pastGuesses =
                     g :: state.pastGuesses
 
+                numGuesses =
+                    List.length pastGuesses
+
                 history =
                     History.update g state.history
 
                 status =
                     if Guess.isCorrect g then
-                        Won
+                        Won numGuesses
 
-                    else if List.length pastGuesses == config.numGuessesAllowed then
+                    else if numGuesses == config.numGuessesAllowed then
                         Lost
 
                     else

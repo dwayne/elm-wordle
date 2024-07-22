@@ -193,11 +193,7 @@ update msg model =
                         Wordle.InProgress ->
                             Loaded { state | maybePrevHistory = Nothing }
 
-                        Wordle.Won ->
-                            let
-                                numGuesses =
-                                    List.length pastGuesses
-                            in
+                        Wordle.Won numGuesses ->
                             Loaded { state | isOpen = True, message = toWonMessage numGuesses }
 
                         Wordle.Lost ->
@@ -228,6 +224,32 @@ keyToAction key =
 
         View.Keyboard.Delete ->
             Wordle.Delete
+
+
+toWonMessage : Int -> String
+toWonMessage n =
+    if n == numGuessesAllowed then
+        "Phew"
+
+    else if n <= 1 then
+        "Genius"
+
+    else if n == 2 then
+        "Magnificent"
+
+    else if n == 3 then
+        "Impressive"
+
+    else if n == 4 then
+        "Splendid"
+
+    else
+        "Great"
+
+
+toLostMessage : Answer -> String
+toLostMessage =
+    String.toUpper << Answer.toString
 
 
 
@@ -301,29 +323,3 @@ viewWordle { wordle, isOpen, message, shake, maybePrevHistory } =
                 ]
             ]
         ]
-
-
-toWonMessage : Int -> String
-toWonMessage n =
-    if n == numGuessesAllowed then
-        "Phew"
-
-    else if n <= 1 then
-        "Genius"
-
-    else if n == 2 then
-        "Magnificent"
-
-    else if n == 3 then
-        "Impressive"
-
-    else if n == 4 then
-        "Splendid"
-
-    else
-        "Great"
-
-
-toLostMessage : Answer -> String
-toLostMessage =
-    String.toUpper << Answer.toString
