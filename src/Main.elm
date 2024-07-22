@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Browser
+import Browser.Events as BE
 import Data.Answer as Answer exposing (Answer)
 import Data.Dictionary as Dictionary exposing (Dictionary)
 import Data.Dictionary.Classic as Classic
@@ -26,7 +27,7 @@ main =
     Browser.element
         { init = init
         , update = update
-        , subscriptions = always Sub.none
+        , subscriptions = subscriptions
         , view = view
         }
 
@@ -250,6 +251,26 @@ toWonMessage n =
 toLostMessage : Answer -> String
 toLostMessage =
     String.toUpper << Answer.toString
+
+
+
+-- SUBSCRIPTIONS
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    case model of
+        Loading ->
+            Sub.none
+
+        Loaded _ ->
+            --
+            -- TODO: Figure out when to disable.
+            --
+            BE.onKeyDown <| View.Keyboard.decoder KeyPressed
+
+        NoAnswer ->
+            Sub.none
 
 
 

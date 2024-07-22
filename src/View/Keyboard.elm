@@ -1,15 +1,10 @@
-module View.Keyboard exposing (Key(..), ViewOptions, view)
+module View.Keyboard exposing (Key(..), ViewOptions, decoder, view)
 
 import Data.History as History exposing (History)
 import Html as H
 import Html.Attributes as HA
+import Json.Decode as JD
 import View.Key
-
-
-type alias ViewOptions msg =
-    { history : History
-    , maybeOnKeyPress : Maybe (Key -> msg)
-    }
 
 
 type
@@ -23,6 +18,46 @@ type
     = Character Char
     | Enter
     | Delete
+
+
+decoder : (Key -> msg) -> JD.Decoder msg
+decoder toMsg =
+    let
+        keyDecoder =
+            JD.string
+                |> JD.andThen
+                    (\s ->
+                        case s of
+                            "Enter" ->
+                                JD.succeed <| toMsg Enter
+
+                            "Backspace" ->
+                                JD.succeed <| toMsg Delete
+
+                            _ ->
+                                case String.uncons s of
+                                    Just ( ch, "" ) ->
+                                        if Char.isAlpha ch then
+                                            JD.succeed <| toMsg <| Character ch
+
+                                        else
+                                            JD.fail "ignored"
+
+                                    _ ->
+                                        JD.fail "ignored"
+                    )
+    in
+    JD.field "key" keyDecoder
+
+
+
+-- VIEW
+
+
+type alias ViewOptions msg =
+    { history : History
+    , maybeOnKeyPress : Maybe (Key -> msg)
+    }
 
 
 view : ViewOptions msg -> H.Html msg
