@@ -28,7 +28,7 @@ type
 view : ViewOptions msg -> H.Html msg
 view options =
     H.div [ HA.class "keyboard" ]
-        [ viewRow options "qwertyyuiop"
+        [ viewRow options "qwertyuiop"
         , viewRow options "asdfghjkl"
         , viewRow options "+zxcvbnm-"
         ]
