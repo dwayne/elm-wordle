@@ -263,11 +263,16 @@ subscriptions model =
         Loading ->
             Sub.none
 
-        Loaded _ ->
-            --
-            -- TODO: Figure out when to disable.
-            --
-            BE.onKeyDown <| View.Keyboard.decoder KeyPressed
+        Loaded { isOpen, shake, maybePrevHistory } ->
+            let
+                isDisabled =
+                    isOpen || shake || maybePrevHistory /= Nothing
+            in
+            if isDisabled then
+                Sub.none
+
+            else
+                BE.onKeyDown <| View.Keyboard.decoder KeyPressed
 
         NoAnswer ->
             Sub.none
