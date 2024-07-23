@@ -1,0 +1,8 @@
+:{$port}
+
+root * {$build}/application
+
+file_server {
+	browse
+	precompressed br gzip
+}

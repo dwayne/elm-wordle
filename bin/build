@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 
 #
-# Usage: build
+# Usage: [optimize_css=0*|1] [optimize_js=0*|1|2|3] [compress=0*|1] build
 #
 
 set -euo pipefail
+
+optimize_css="${optimize_css:-0}"
+optimize_js="${optimize_js:-0}"
+compress="${compress:-0}"
 
 src="${project:?}"
 out="${build:?}/application"
@@ -22,11 +26,17 @@ build_public () {
 }
 
 build_sass () {
-  build-sass "$out"
+  optimize="$optimize_css" build-sass "$out"
 }
 
 build_elm () {
-  build-elm "$src/src/Main.elm" "$out/app.js"
+  optimize="$optimize_js" build-elm "$src/src/Main.elm" "$out/app.js"
 }
 
-clean && prepare && build_public && build_sass && build_elm
+compress_files () {
+  if [[ "$compress" != 0 ]]; then
+    cd "$out" && find . \( -name '*.html' -o -name '*.css' -o -name '*.js' \) -exec brotli "{}" \; -exec zopfli "{}" \;
+  fi
+}
+
+clean && prepare && build_public && build_sass && build_elm && compress_files

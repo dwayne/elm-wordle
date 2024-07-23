@@ -1,6 +1,26 @@
 {
   "lockfile_version": "1",
   "packages": {
+    "brotli@latest": {
+      "last_modified": "2024-07-12T02:08:50Z",
+      "resolved": "github:NixOS/nixpkgs/6794d064edc69918bb0fc0e0eda33ece324be17a#brotli",
+      "source": "devbox-search",
+      "version": "1.1.0",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/glcp557knja9jmrdr1idyjrdfvrj96ps-brotli-1.1.0"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/dab344a6cv39n0wcklk9sdmpsvy8shlc-brotli-1.1.0"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/3d20qllbajl9yfv8i06bvf1lwj6hmqqd-brotli-1.1.0"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/w3p2vhjryqblz16h125g6sckjglc43ny-brotli-1.1.0"
+        }
+      }
+    },
     "caddy@latest": {
       "last_modified": "2024-07-07T16:08:25Z",
       "resolved": "github:NixOS/nixpkgs/ab82a9612aa45284d4adf69ee81871a389669a9e#caddy",
@@ -61,6 +81,26 @@
         }
       }
     },
+    "elmPackages.elm-optimize-level-2@latest": {
+      "last_modified": "2024-07-07T07:43:47Z",
+      "resolved": "github:NixOS/nixpkgs/b60793b86201040d9dee019a05089a9150d08b5b#elmPackages.elm-optimize-level-2",
+      "source": "devbox-search",
+      "version": "2-0.3.5",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/7xdmwixw7sw955zpkgnq39165nvjsnx8-elm-optimize-level-2-0.3.5"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/dfyng1s1agpv9ndiaydn158ia2641b4l-elm-optimize-level-2-0.3.5"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/v786zjjjhr4vqbfqc0l32dxx595c0vx0-elm-optimize-level-2-0.3.5"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/xpljnfmcgg10fzbghd29bkwrwwb9x1z2-elm-optimize-level-2-0.3.5"
+        }
+      }
+    },
     "elmPackages.elm-review@latest": {
       "last_modified": "2024-07-07T07:43:47Z",
       "resolved": "github:NixOS/nixpkgs/b60793b86201040d9dee019a05089a9150d08b5b#elmPackages.elm-review",
@@ -118,6 +158,46 @@
         },
         "x86_64-linux": {
           "store_path": "/nix/store/rsfayk4gs3bqj269kpz5y7jfc27800sl-elm-0.19.1"
+        }
+      }
+    },
+    "terser@latest": {
+      "last_modified": "2024-07-07T07:43:47Z",
+      "resolved": "github:NixOS/nixpkgs/b60793b86201040d9dee019a05089a9150d08b5b#terser",
+      "source": "devbox-search",
+      "version": "5.31.1",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/pfgzzn22ixm51px344fybvi2n7jy4n8f-terser-5.31.1"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/d4ab3fr3xqlpqxkph8scb4ax4h465xv2-terser-5.31.1"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/hjnwn1bmysvy9zk0nzdg70fsnpzmwf2m-terser-5.31.1"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/476gmszh6lb69z3gn9x1h76gxv95pd5a-terser-5.31.1"
+        }
+      }
+    },
+    "zopfli@latest": {
+      "last_modified": "2024-07-17T09:45:27Z",
+      "resolved": "github:NixOS/nixpkgs/5e73714b16ca222dcb2fc3ea2618fd7ba698da65#zopfli",
+      "source": "devbox-search",
+      "version": "1.0.3",
+      "systems": {
+        "aarch64-darwin": {
+          "store_path": "/nix/store/l1dvjlklmdv5g1nrkima3bd99b26kdpb-zopfli-1.0.3"
+        },
+        "aarch64-linux": {
+          "store_path": "/nix/store/gn7i8ixi6pc79nh5anbvbdwl5vqxvwnl-zopfli-1.0.3"
+        },
+        "x86_64-darwin": {
+          "store_path": "/nix/store/sczgf9xsn9ig10mqk2w4fi3wxz5sg2zl-zopfli-1.0.3"
+        },
+        "x86_64-linux": {
+          "store_path": "/nix/store/wcvxsszwxiscczwl1xkamjqc4qmw2fdf-zopfli-1.0.3"
         }
       }
     }

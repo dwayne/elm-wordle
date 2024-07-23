@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# Usage: [optimize=0*|1] build-sass output-directory
+# Usage: [optimize=0*|1] build-sass outputDir
 #
 
 set -euo pipefail
@@ -11,8 +11,12 @@ out="${1:?}"
 
 src="${project:?}"
 
-if [[ "$optimize" = 0 ]]; then
-  sass --embed-sources "$src/sass/index.scss" "$out/index.css"
-else
-  sass --style=compressed --no-source-map "$src/sass/index.scss" "$out/index.css"
-fi
+main () {
+  if [[ "$optimize" = 0 ]]; then
+    sass --embed-sources "$src/sass/index.scss" "$out/index.css"
+  else
+    sass --style=compressed --no-source-map "$src/sass/index.scss" "$out/index.css"
+  fi
+}
+
+main

@@ -1,12 +1,53 @@
 #!/usr/bin/env bash
 
 #
-# Usage: build-elm input-file output-file
+# Usage: build-elm [optimize=0*|1|2|3] inputFile outputFile
 #
 
 set -euo pipefail
 
+optimize="${optimize:-0}"
 inputFile="${1:?}"
 outputFile="${2:?}"
 
-elm make "$inputFile" --debug --output "$outputFile"
+main () {
+  case "$optimize" in
+    1|2|3)
+      func=elm_make_optimize_"$optimize"
+      ;;
+    *)
+      func=elm_make_debug
+      ;;
+  esac
+
+  "$func" "$inputFile" "$outputFile"
+}
+
+elm_make_debug () {
+  elm make "$1" --debug --output "$2"
+}
+
+elm_make_optimize_1 () {
+  elm make "$1" --optimize --output "$2"
+  minify "$2"
+}
+
+elm_make_optimize_2 () {
+  elm-optimize-level-2 "$1" --output "$2"
+  minify "$2"
+}
+
+elm_make_optimize_3 () {
+  elm-optimize-level-2 "$1" --optimize-speed --output "$2"
+  minify "$2"
+}
+
+minify () {
+  js="$1"
+  min="${js%.js}.min.js"
+
+  terser "$js" --compress 'pure_funcs="F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9",pure_getters,keep_fargs=false,unsafe_comps,unsafe' | terser --mangle --output "$min"
+  mv "$min" "$js"
+}
+
+main
