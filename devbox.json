@@ -11,6 +11,7 @@
       "elmPackages.elm-optimize-level-2": "latest",
       "elmPackages.elm-review": "latest",
       "elmPackages.elm-test": "latest",
+      "shellcheck": "latest",
       "terser": "latest",
       "zopfli": "latest"
   },
