@@ -3,7 +3,7 @@ module Data.Guess exposing (Guess, guess, isCorrect)
 import Data.Answer as Answer exposing (Answer)
 import Data.Bag as Bag exposing (Bag)
 import Data.Letter as Letter exposing (Letter)
-import Data.Word as Word exposing (Word)
+import Data.Word exposing (Word)
 
 
 type alias Guess =

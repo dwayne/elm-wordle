@@ -1,10 +1,8 @@
 module Data.Wordle exposing
     ( Action(..)
-    , Config
     , Details
     , Outcome(..)
     , Reason(..)
-    , State
     , Status(..)
     , Wordle
     , guess
@@ -14,11 +12,10 @@ module Data.Wordle exposing
     )
 
 import Data.Answer as Answer exposing (Answer)
-import Data.Bag as Bag exposing (Bag)
+import Data.Bag exposing (Bag)
 import Data.Dictionary as Dictionary exposing (Dictionary)
 import Data.Guess as Guess exposing (Guess)
 import Data.History as History exposing (History)
-import Data.Letter as Letter exposing (Letter)
 import Data.Word as Word exposing (Word)
 
 

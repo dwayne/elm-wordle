@@ -1,4 +1,4 @@
-module Data.Bag exposing (Bag, contains, empty, insert, remove, toList)
+module Data.Bag exposing (Bag, contains, empty, insert, remove)
 
 import Dict exposing (Dict)
 
@@ -51,8 +51,3 @@ remove element (Bag contents) =
                         Nothing
             )
             contents
-
-
-toList : Bag a -> List ( a, Int )
-toList (Bag contents) =
-    Dict.toList contents

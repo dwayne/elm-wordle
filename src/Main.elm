@@ -5,19 +5,14 @@ import Browser.Events as BE
 import Data.Answer as Answer exposing (Answer)
 import Data.Dictionary as Dictionary exposing (Dictionary)
 import Data.Dictionary.Classic as Classic
-import Data.Guess exposing (Guess)
 import Data.History exposing (History)
-import Data.Letter as Letter
-import Data.Word as Word
 import Data.Wordle as Wordle exposing (Wordle)
 import Html as H
 import Html.Attributes as HA
 import Lib.Timer as Timer
 import Random
-import View.Guess
 import View.Guesses
 import View.Keyboard
-import View.Letter
 import View.Message
 import View.Title
 
@@ -187,7 +182,7 @@ update msg model =
 
                 RevealEnded ->
                     let
-                        { answer, pastGuesses, status } =
+                        { answer, status } =
                             Wordle.inspect state.wordle
                     in
                     ( case status of
