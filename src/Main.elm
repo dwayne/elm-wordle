@@ -190,10 +190,10 @@ update msg model =
                             Loaded { state | maybePrevHistory = Nothing }
 
                         Wordle.Won numGuesses ->
-                            Loaded { state | isOpen = True, message = toWonMessage numGuesses }
+                            Loaded { state | isOpen = True, message = toWonMessage numGuesses, maybePrevHistory = Nothing }
 
                         Wordle.Lost ->
-                            Loaded { state | isOpen = True, message = toLostMessage answer }
+                            Loaded { state | isOpen = True, message = toLostMessage answer, maybePrevHistory = Nothing }
                     , Cmd.none
                     )
 
