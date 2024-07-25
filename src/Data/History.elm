@@ -1,4 +1,11 @@
-module Data.History exposing (History, Past(..), empty, getPast, update)
+module Data.History exposing
+    ( History
+    , Past(..)
+    , empty
+    , getPast
+    , toList
+    , update
+    )
 
 import Data.Guess exposing (Guess)
 import Data.Letter as Letter exposing (Letter)
@@ -59,3 +66,8 @@ letterToPast letter =
 getPast : Char -> History -> Maybe Past
 getPast ch (History pasts) =
     Dict.get ch pasts
+
+
+toList : History -> List ( Char, Past )
+toList (History pasts) =
+    Dict.toList pasts
