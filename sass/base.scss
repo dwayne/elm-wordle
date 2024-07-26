@@ -8,22 +8,43 @@
 }
 
 :root {
-  --letter-width: 50px;
+  --letter-width: 40px;
   --letter-height: var(--letter-width);
-  --letter-font-size: 1.5rem;
+  --letter-font-size: 1.25rem;
 
   --tile-width: var(--letter-width);
   --tile-height: var(--letter-height);
 
-  --key-width: 28px;
-  --key-height: 38px;
-  --key-large-font-size: 0.65rem;
+  --key-width: 20px;
+  --key-height: 30px;
+  --key-large-font-size: 0.4rem;
 
-  --wordle-section-gap: 40px;
+  --wordle-section-gap: 30px;
 
-  --message-padding-vertical: 8px;
-  --message-padding-horizontal: 12px;
-  --message-font-size: 0.8rem;
+  --message-padding-vertical: 6px;
+  --message-padding-horizontal: 8px;
+  --message-font-size: 0.6rem;
+}
+
+@media screen and (min-width: 360px) {
+  :root {
+    --letter-width: 50px;
+    --letter-height: var(--letter-width);
+    --letter-font-size: 1.5rem;
+
+    --tile-width: var(--letter-width);
+    --tile-height: var(--letter-height);
+
+    --key-width: 28px;
+    --key-height: 38px;
+    --key-large-font-size: 0.65rem;
+
+    --wordle-section-gap: 40px;
+
+    --message-padding-vertical: 8px;
+    --message-padding-horizontal: 12px;
+    --message-font-size: 0.8rem;
+  }
 }
 
 @media screen and (min-width: 600px) {
